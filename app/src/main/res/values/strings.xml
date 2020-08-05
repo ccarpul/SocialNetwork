@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">SocialNetwork</string>
+    <string name="settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="facebook_app_id">620112595552975</string>
+    <string name="fb_login_protocol_scheme">fb620112595552975</string>
+
+    <!--FireBase-->
+
+    <string name="networkError">com.google.firebase.FirebaseNetworkException: A network error
+        (such as timeout, interrupted connection or unreachable host) has occurred.</string>
+
+    <string name="formatError">com.google.firebase.auth.FirebaseAuthInvalidCredentialsException:
+        The email address is badly formatted.</string>
+
+    <string name="emailInUse">com.google.firebase.auth.FirebaseAuthUserCollisionException:
+        The email address is already in use by another account.</string>
+
+    <string name="apiException">12501:\u0020</string>
+    <string name="cancelByUser">com.google.firebase.auth.FirebaseAuthWebException: The web operation was canceled by the user.</string>
+
+    <string name="loginFailed">"Login failed"</string>
+
+    <string name="tokenUserTwitter">108441936-pJJyjYy2aTmcZSusXw1bCGVluSRcR3a8RJApFpLd</string>
+    <string name="secretUserTwitter">nmztXFJxJ21N6xD6zzwhO02XbUi1hnWhG8s48o7qiP1y1</string>
+    <string name="tokenAppTwitter">Xh59V6pto5EzFmOQdrq8Qj9tu</string>
+    <string name="secretPPTwitter">uFfhSFJFS2ADnDpb1b9HiwDRBVoXCzX6fHKGtoMF0LFMGZUA5P</string>
+
+</resources>

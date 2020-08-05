@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.twitter.TwitterFragment">
+
+    <FrameLayout
+    android:id="@+id/frameProgressBarTw"
+    android:layout_width="match_parent"
+    android:layout_height="4dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    >
+
+    <ProgressBar
+        android:id="@+id/progressBarTw"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-8dp"
+        android:layout_marginBottom="-8dp"
+        android:background="@color/colorPrimaryDark"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+</FrameLayout>
+
+    <include layout="@layout/profile_style"></include>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/twitterRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        tools:listitem="@layout/recycler_style_twitter" />
+
+</LinearLayout>

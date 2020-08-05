@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="15dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundCardView"
+        android:paddingStart="12dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/screenName"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:padding="2dp"
+            android:textColor="#4F5555"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/user"
+            app:layout_constraintTop_toTopOf="parent"
+            tool:text="Screem Name" />
+
+        <TextView
+            android:id="@+id/likesCount"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="120dp"
+            android:drawableLeft="@drawable/ic_outline_favorite_border_24"
+            android:ellipsize="end"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            tool:ignore="SmallSp"
+            tool:text="0" />
+
+        <ImageView
+            android:id="@+id/urlToImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="TODO"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tool:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="8dp"
+            android:padding="2dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/urlToImage"
+            tool:text="Text Tweet" />
+
+        <TextView
+            android:id="@+id/user"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:padding="2dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/urlToImage"
+            app:layout_constraintTop_toTopOf="parent"
+            tool:text="User" />
+
+        <TextView
+            android:id="@+id/retweetCount"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="12dp"
+            android:drawableLeft="@drawable/ic_retweet"
+            android:ellipsize="end"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            tool:ignore="SmallSp"
+            tool:text="0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

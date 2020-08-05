@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraph"
+    app:startDestination="@id/loginTwitterFragment">
+
+    <fragment
+        android:id="@+id/instagramFragment"
+        android:name="com.example.socialnetwork.ui.instagram.InstagramFragment"
+        android:label="fragment_instagram"
+        tools:layout="@layout/fragment_instagram" />
+    <fragment
+        android:id="@+id/twitterFragment"
+        android:name="com.example.socialnetwork.ui.twitter.TwitterFragment"
+        android:label="fragment_twitter"
+        tools:layout="@layout/fragment_twitter" >
+        <action
+            android:id="@+id/action_twitterFragment_to_loginTwitterFragment"
+            app:destination="@id/loginTwitterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.socialnetwork.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/loginTwitterFragment"
+        android:name="com.example.socialnetwork.ui.login.LoginFragment"
+        android:label="login_instagram"
+        tools:layout="@layout/login_instagram" />
+</navigation>
