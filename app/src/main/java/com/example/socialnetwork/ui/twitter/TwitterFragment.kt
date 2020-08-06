@@ -1,8 +1,9 @@
 package com.example.socialnetwork.ui.twitter
 
 import android.content.Context
-import android.media.session.MediaSession
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,29 +11,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
 import com.example.socialnetwork.adapter.AdapterRecyclerTwitter
-import com.example.socialnetwork.adapter.AdapterRecyclerView
-import com.example.socialnetwork.data.model.ModelTwitter
-import com.example.socialnetwork.data.prueba
 import com.example.socialnetwork.hide
 import com.example.socialnetwork.show
-import com.example.socialnetwork.ui.instagram.InstagramViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.OAuthCredential
-import com.google.firebase.auth.TwitterAuthCredential
-import com.google.firebase.auth.TwitterAuthProvider
+import com.google.firebase.auth.*
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_instagram.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_instagram.userName
 import kotlinx.android.synthetic.main.fragment_twitter.*
 import kotlinx.android.synthetic.main.profile_style.*
-import kotlinx.android.synthetic.main.recycler_style.view.*
-import kotlinx.android.synthetic.main.recycler_style_twitter.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.prefs.Preferences
 
 class TwitterFragment : Fragment() {
 
@@ -45,6 +38,7 @@ class TwitterFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         if (auth.currentUser == null) {
             findNavController().apply {
                 popBackStack()
@@ -52,11 +46,9 @@ class TwitterFragment : Fragment() {
             }
         }
         twitterViewModel.modelTwitter.observe(this, Observer(::upDateUi))
-
-        
     }
 
-    override fun onCreateView(
+        override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -66,7 +58,10 @@ class TwitterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        userName.text = auth.currentUser?.displayName ?: ""
+        toolBar = (activity as MainActivity).toolBar
+        val user = auth.currentUser?.displayName
+        toolBar.title = getString(R.string.TitleSocialNetwork) + user
+        userName.text = user ?: getString(R.string.twitter)
          if( auth.currentUser?.photoUrl != null) {
              Picasso.with(requireContext()).load(auth.currentUser?.photoUrl)
                  .placeholder(R.mipmap.ic_launcher_foreground)
@@ -80,7 +75,6 @@ class TwitterFragment : Fragment() {
         when (state) {
             is TwitterViewModel.StateLiveData.InitialStateUi -> {
                 twitterViewModel.getData()
-                //twitterViewModel.getProfile()
             }
             is TwitterViewModel.StateLiveData.PreCall -> {
                 progressBarTw.show()
@@ -95,8 +89,11 @@ class TwitterFragment : Fragment() {
             is TwitterViewModel.StateLiveData.RefreshStateProfile -> {
                 userName.text = "@${state.response}"
             }
+            is TwitterViewModel.StateLiveData.AdapterRecycler -> {
+                for (data in state.dataRecyclerView)
+                    adapterRecycler.addData(data)
+            }
         }
-
     }
 
     private fun setupRecyclerView() {
@@ -105,6 +102,5 @@ class TwitterFragment : Fragment() {
             layoutManager = linearLayoutManager
             adapter = adapterRecycler
         }
-
     }
 }

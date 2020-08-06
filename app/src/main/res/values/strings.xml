@@ -1,31 +1,43 @@
 <resources>
-    <string name="app_name">SocialNetwork</string>
+    <string name="app_name">Social Network </string>
     <string name="settings">Settings</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="facebook_app_id">620112595552975</string>
-    <string name="fb_login_protocol_scheme">fb620112595552975</string>
+    <string name="facebook_app_id" translatable="false">620112595552975</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb620112595552975</string>
 
     <!--FireBase-->
 
-    <string name="networkError">com.google.firebase.FirebaseNetworkException: A network error
+    <string name="networkError" translatable="false">com.google.firebase.FirebaseNetworkException: A network error
         (such as timeout, interrupted connection or unreachable host) has occurred.</string>
 
-    <string name="formatError">com.google.firebase.auth.FirebaseAuthInvalidCredentialsException:
+    <string name="formatError" translatable="false">com.google.firebase.auth.FirebaseAuthInvalidCredentialsException:
         The email address is badly formatted.</string>
 
-    <string name="emailInUse">com.google.firebase.auth.FirebaseAuthUserCollisionException:
+    <string name="emailInUse" translatable="false">com.google.firebase.auth.FirebaseAuthUserCollisionException:
         The email address is already in use by another account.</string>
 
-    <string name="apiException">12501:\u0020</string>
-    <string name="cancelByUser">com.google.firebase.auth.FirebaseAuthWebException: The web operation was canceled by the user.</string>
+    <string name="apiException" translatable="false">12501:\u0020</string>
+    <string name="cancelByUser" translatable="false">com.google.firebase.auth.FirebaseAuthWebException: The web operation was canceled by the user.</string>
 
     <string name="loginFailed">"Login failed"</string>
 
-    <string name="tokenUserTwitter">108441936-pJJyjYy2aTmcZSusXw1bCGVluSRcR3a8RJApFpLd</string>
-    <string name="secretUserTwitter">nmztXFJxJ21N6xD6zzwhO02XbUi1hnWhG8s48o7qiP1y1</string>
-    <string name="tokenAppTwitter">Xh59V6pto5EzFmOQdrq8Qj9tu</string>
-    <string name="secretPPTwitter">uFfhSFJFS2ADnDpb1b9HiwDRBVoXCzX6fHKGtoMF0LFMGZUA5P</string>
+    <string name="tokenUserTwitter" translatable="false">108441936-pJJyjYy2aTmcZSusXw1bCGVluSRcR3a8RJApFpLd</string>
+    <string name="secretUserTwitter" translatable="false">nmztXFJxJ21N6xD6zzwhO02XbUi1hnWhG8s48o7qiP1y1</string>
+    <string name="tokenAppTwitter" translatable="false">Xh59V6pto5EzFmOQdrq8Qj9tu</string>
+    <string name="secretPPTwitter" translatable="false">uFfhSFJFS2ADnDpb1b9HiwDRBVoXCzX6fHKGtoMF0LFMGZUA5P</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="titleSetting">Setting</string>
+    <string name="twitter">Twitter</string>
+    <string name="TitleSocialNetwork">"Socialnetwork of "</string>
+    <string name="welcome_to_instagram">Welcome to Instagram</string>
+    <string name="logout_twiiter">Logout Twiiter</string>
+    <string name="logout_facebook">Logout Facebook/Instagram</string>
+    <string name="continue_with_twitter">Continue with Twitter</string>
+    <string name="loading">Loading</string>
+    <string name="carpul_company" translatable="false">Carpul Company</string>
+    <string name="instagram" translatable="false">Instagram</string>
+    <string name="endList">End List</string>
 
 </resources>

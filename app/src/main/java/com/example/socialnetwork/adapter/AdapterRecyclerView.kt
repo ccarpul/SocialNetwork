@@ -12,8 +12,7 @@ import kotlinx.android.synthetic.main.recycler_style.view.*
 
 
 class AdapterRecyclerView(
-    private var list: ArrayList<Data>,
-private val listener: OnClickSelectedItem
+    private var list: ArrayList<Data>
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val originalList: ArrayList<Data> = arrayListOf()
@@ -48,13 +47,7 @@ private val listener: OnClickSelectedItem
         }
     }
 
-    interface OnClickSelectedItem {
-        fun onClick(query: String)
-    }
-
-
-    inner class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    inner class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var url: String = ""
         fun bind(data: Data) {
 
@@ -69,11 +62,6 @@ private val listener: OnClickSelectedItem
                         .into(urlToImage)
                 } else urlToImage.setImageDrawable(resources.getDrawable(R.mipmap.ic_launcher))
             }
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(p0: View?) {
-            listener.onClick(url)
         }
     }
 }

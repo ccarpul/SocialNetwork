@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.socialnetwork.ResultWrapper
 import com.example.socialnetwork.data.model.ModelResponse
 import com.example.socialnetwork.data.model.ProfileInstagram
+import com.example.socialnetwork.ui.login.LoginViewModel
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -16,25 +17,26 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
     var pos = 0
     var mediaCount=0
     var after =""
+    private val dataRestaurerRecycler = arrayListOf<ModelResponse>()
+
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
-    /**Sobreesribiendo la variable coroutineContext para usar la
-    // interfaz CourutinaScope como ambito de las coroutinas del ViewModel
-    // Especifico el dispacher para que se ejecute en el hilo principal y
-    //le paso la referencia job para controlar el estado de la corrutina*/
+
     sealed class StateLiveData{
         object InitialStateUi: StateLiveData()
         object PreCall:        StateLiveData()
         class  RefreshStateUi(val response: ModelResponse) : StateLiveData()
         class  RefreshStateProfile(val response: ProfileInstagram) : StateLiveData()
         object PostCall:        StateLiveData()
+        class AdapterRecycler(val dataRecyclerView: ArrayList<ModelResponse>): InstagramViewModel.StateLiveData()
     }
 
     private val uiModelInstagram = MutableLiveData<StateLiveData>()
     val modelInstagram: LiveData<StateLiveData>
         get() {
             if (uiModelInstagram.value == null) uiModelInstagram.value = StateLiveData.InitialStateUi
+            else  uiModelInstagram.value = StateLiveData.AdapterRecycler(dataRestaurerRecycler)
             return uiModelInstagram
         }
 
@@ -46,27 +48,23 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
             when (val result =  instagramRespository.getDataInstagram(after)) {
                 is ResultWrapper.Success      -> {
                     after = if (mediaCount - pos >= 4) result.value.paging.cursors.after else ""
-
                     uiModelInstagram.value = StateLiveData.RefreshStateUi(result.value)
-
+                    dataRestaurerRecycler.add(result.value)
                 }
                 is ResultWrapper.NetworkError -> { Log.d("Test", result.throwable.message()) }
                 is ResultWrapper.GenericError -> { Log.d("Test", result.error) }
             }
             uiModelInstagram.value = StateLiveData.PostCall
         }
-
     }
 
     fun getProfile() {
 
         launch {
 
-
             uiModelInstagram.value = StateLiveData.PreCall
             when (val result = instagramRespository.getProfileInstagram()) {
                 is ResultWrapper.Success      -> {
-
                     uiModelInstagram.value = StateLiveData.RefreshStateProfile(result.value)
                     mediaCount = result.value.media_count
                 }
@@ -76,11 +74,9 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
             uiModelInstagram.value = StateLiveData.PostCall
         }
     }
-
     init { job = SupervisorJob() }
 
-    override fun onCleared() {  //Metodo de la clase View Model, al cerrarse el View Model
-        // se cierran todas las corrutinas pertenecientes ael presente Scope
+    override fun onCleared() {
         job.cancel()
         super.onCleared()
     }

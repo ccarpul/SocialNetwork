@@ -1,6 +1,5 @@
 package com.example.socialnetwork.ui.login
 
-import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
@@ -15,8 +14,8 @@ class LoginRepository {
         }else{
 
             val oAuthProvider = OAuthProvider.newBuilder("twitter.com")
-            instance.startActivityForSignInWithProvider(activity!!, oAuthProvider.build()).addOnSuccessListener {
-
+            instance.startActivityForSignInWithProvider(activity!!, oAuthProvider.build())
+                .addOnSuccessListener {
 
             }
         }

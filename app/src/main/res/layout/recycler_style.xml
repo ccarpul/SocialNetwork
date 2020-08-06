@@ -26,7 +26,6 @@
             android:layout_width="172dp"
             android:layout_height="150dp"
             android:background="@drawable/custom_bg_imagerecycler"
-            android:contentDescription="TODO"
             android:padding="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

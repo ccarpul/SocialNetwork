@@ -9,13 +9,13 @@
         app:showAsAction="ifRoom" />
     <item android:id="@+id/instagramFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Instagram"
+        android:icon="@drawable/ic_instagram_logo_svgrepo_com"
+        android:title="@string/instagram"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/twitterFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_twitter"
-        android:title="Twitter"
+        android:icon="@drawable/ic_twitter_black"
+        android:title="@string/twitter"
         app:showAsAction="ifRoom" />
 
 </menu>

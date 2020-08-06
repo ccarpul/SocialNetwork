@@ -3,7 +3,6 @@ package com.example.socialnetwork.ui.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,20 +14,23 @@ import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
-import kotlinx.android.synthetic.main.login_twitter.*
+import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.login_layout.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class LoginFragment: Fragment() {
 
     private val loginViewModel: LoginViewModel by viewModel()
-
     private val callbackManager = CallbackManager.Factory.create()
+    private lateinit var toolBar: MaterialToolbar
 
 
     enum class ActionFireBase { TWITTER, FACEBOOK }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         loginViewModel.loginResult.observe(this, Observer {
 
             when (it) {
@@ -43,7 +45,6 @@ class LoginFragment: Fragment() {
                             }
                         }
                         is myResult.GenericError -> {
-                            Log.i("Carpul", "onAttach: ${it.result.error}")
                             firebaseErrors(it.result.error.toString(), requireContext())
                         }
                     }
@@ -57,13 +58,13 @@ class LoginFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.login_twitter, container, false)
+        return inflater.inflate(R.layout.login_layout, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolBar = (activity as MainActivity).toolBar
+        toolBar.title = getString(R.string.welcome)
 
         buttonFacebook.setOnClickListener {
 
@@ -81,13 +82,13 @@ class LoginFragment: Fragment() {
                     override fun onCancel() {}
 
                     override fun onError(error: FacebookException?) {
-                        LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError(error?.message))
+                        LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError(error?.message),"")
                     }
                 })
         }
 
         textViewTwitter.setOnClickListener {
-            loginViewModel.login(LoginFragment.ActionFireBase.TWITTER, activity)
+            loginViewModel.login(ActionFireBase.TWITTER, activity)
         }
     }
 

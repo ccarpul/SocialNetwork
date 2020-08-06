@@ -1,7 +1,5 @@
 package com.example.socialnetwork.ui.twitter
 
-
-import android.util.Log
 import com.example.socialnetwork.Constants
 import com.example.socialnetwork.ResultWrapper
 import com.example.socialnetwork.data.TwitterApiClient
@@ -10,14 +8,13 @@ import com.example.socialnetwork.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-
 class TwitterRepository(private val twitterApiClient: TwitterApiClient) {
-    val dispatcher = Dispatchers.IO
-    suspend fun getDataTwitter():
+    private val dispatcher = Dispatchers.IO
+    suspend fun getDataTwitter(token: String):
             ResultWrapper<ModelTwitter> =
         withContext(Dispatchers.IO) {
             safeApiCall(dispatcher) {
-                twitterApiClient.getProfileTwitter()
+                twitterApiClient.getProfileTwitter(Constants.AUTHORIZATION)
             }
         }
 }

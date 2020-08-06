@@ -1,7 +1,7 @@
 package com.example.socialnetwork
 
+import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolBar)
+
         makeNavigationViewDrawer()
 
         val navController = findNavController(R.id.navHostFragment)
@@ -22,12 +24,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeNavigationViewDrawer() {
-        val iconMenuNavigation = ContextCompat.getDrawable(applicationContext, R.drawable.ic_hamburger_24)
+        val iconMenuNavigation =
+            ContextCompat.getDrawable(this, R.drawable.ic_hamburger_24)
         val drawer: DrawerLayout = findViewById(R.id.drawer)
         val toggle = ActionBarDrawerToggle(
-            this, drawer, toolBar, R.string.app_name, R.string.app_name)
+            this, drawer, toolBar, R.string.app_name, R.string.app_name
+        )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
         toolBar.navigationIcon = iconMenuNavigation
+        navDrawer.apply {
+            setBackgroundColor(resources.getColor(R.color.white))
+            itemTextColor = ColorStateList.valueOf(resources.getColor(R.color.black))
+            itemIconTintList = ColorStateList.valueOf(resources.getColor(R.color.black))
+        }
     }
 }

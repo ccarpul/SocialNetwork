@@ -1,16 +1,12 @@
 package com.example.socialnetwork.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.R
 import com.example.socialnetwork.data.model.*
-import com.example.socialnetwork.hide
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.recycler_style.view.*
 import kotlinx.android.synthetic.main.recycler_style.view.description
 import kotlinx.android.synthetic.main.recycler_style.view.urlToImage
 import kotlinx.android.synthetic.main.recycler_style_twitter.view.*
@@ -61,7 +57,7 @@ class AdapterRecyclerTwitter(
                 user.text = data.user.name
                 screenName.text = "@${data.user.screen_name}"
                 likesCount.text = data.user.favourites_count.toString()
-                retweetCount.text = data.retweet_count.toString()
+                retweetCount.text = data.retwit_count.toString()
                 if(data.user.verified) screenName
                     .setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_verificated_24,
                     0,0,0)

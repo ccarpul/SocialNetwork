@@ -3,6 +3,7 @@
     package="com.example.socialnetwork">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".SocialNetworkApp"
         android:allowBackup="true"
@@ -19,7 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

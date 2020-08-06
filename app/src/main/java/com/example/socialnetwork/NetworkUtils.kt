@@ -1,7 +1,6 @@
 package com.example.socialnetwork
 
 import android.content.Context
-import android.util.Log
 import com.example.socialnetwork.ui.login.LoginViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -25,22 +24,27 @@ sealed class myResult<out T> {
     }
 }
 
-fun Task<AuthResult>.AuthResult(provider: String) =
+fun Task<AuthResult>.AuthResult(token: String, provider: String) =
     if (this.isSuccessful) {
-        LoginViewModel.StateLiveData.RefreshUi(myResult.Success(provider)) }
+        LoginViewModel.StateLiveData.RefreshUi(myResult.Success(provider) ,token)}
     else {
-        if (this.exception != null) LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError(this.exception.toString()))
-        else  LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError("Error"))
+        if (this.exception != null)
+            LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError(this.exception.toString()),"")
+        else  LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError("Error"), "")
     }
 
 fun firebaseErrors(error: String?, context: Context) {
 
     when (error) {
-        context.getString(R.string.networkError) -> makeToast(context, "Please check your conection")
-        context.getString(R.string.formatError) -> makeToast(context, "Please check your Email format")
-        context.getString(R.string.emailInUse) -> makeToast(context, "Email in use try to login with Google account")
+        context.getString(R.string.networkError) ->
+            makeToast(context, "Please check your conection")
+        context.getString(R.string.formatError) ->
+            makeToast(context, "Please check your Email format")
+        context.getString(R.string.emailInUse) ->
+            makeToast(context, "Email in use try to login with Google account")
         context.getString(R.string.apiException) -> makeToast(context, "Choice an option")
-        context.getString(R.string.cancelByUser) -> makeToast(context, "cancel by user")
+        context.getString(R.string.cancelByUser) ->
+            makeToast(context, "cancel by user")
         else -> makeToast(context, context.getString(R.string.loginFailed))
     }
 }
@@ -60,9 +64,12 @@ suspend fun <T> safeApiCall(
 
         } catch (throwable: Throwable) {
             when (throwable) {
-                is IOException -> ResultWrapper.GenericError(null, "${throwable.localizedMessage}")
-                is HttpException -> ResultWrapper.NetworkError(throwable)
-                else -> ResultWrapper.GenericError(null, "${throwable.localizedMessage}")
+                is IOException ->
+                    ResultWrapper.GenericError(null, "${throwable.localizedMessage}")
+                is HttpException ->
+                    ResultWrapper.NetworkError(throwable)
+                else ->
+                    ResultWrapper.GenericError(null, "${throwable.localizedMessage}")
             }
         }
     }

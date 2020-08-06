@@ -28,5 +28,5 @@
         android:id="@+id/loginTwitterFragment"
         android:name="com.example.socialnetwork.ui.login.LoginFragment"
         android:label="login_instagram"
-        tools:layout="@layout/login_instagram" />
+        tools:layout="@layout/login_layout" />
 </navigation>

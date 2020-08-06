@@ -1,10 +1,8 @@
 package com.example.socialnetwork.data.model
 
-import com.example.socialnetwork.data.prueba
-
 class ModelTwitter : ArrayList<ModelTwitter.ModelTwitterItem>() {
     data class ModelTwitterItem(
-        val retweet_count: Int,
+        val retwit_count: Int,
         val text: String,
         val user: User
     ) {

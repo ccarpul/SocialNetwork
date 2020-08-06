@@ -28,7 +28,6 @@
             android:layout_height="24dp"
             android:layout_marginStart="32dp"
             android:background="@drawable/custom_bg_imagerecycler"
-            android:contentDescription="TODO"
             android:padding="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

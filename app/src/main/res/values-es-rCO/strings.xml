@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">"Red Social "</string>
+    <string name="settings">Configración</string>
+    <string name="loginFailed">Error de autentificación</string>
+    <string name="welcome">Welcome</string>
+    <string name="titleSetting">Configuración</string>
+    <string name="TitleSocialNetwork">Redes Sociales de</string>
+    <string name="welcome_to_instagram">Bienvenido a Instagram</string>
+    <string name="logout_twiiter">Salir de Twitter</string>
+    <string name="logout_facebook">Salir de Instagram/Facebook</string>
+    <string name="continue_with_twitter">Continuar con Twitter</string>
+    <string name="loading">Cargando</string>
+    <string name="endList">End List</string>
+</resources>
