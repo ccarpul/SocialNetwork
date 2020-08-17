@@ -4,10 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.socialnetwork.ResultWrapper
+import com.example.socialnetwork.utils.ResultWrapper
 import com.example.socialnetwork.data.model.ModelResponse
 import com.example.socialnetwork.data.model.ProfileInstagram
-import com.example.socialnetwork.ui.login.LoginViewModel
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 

@@ -1,4 +1,4 @@
-package com.example.socialnetwork
+package com.example.socialnetwork.utils
 
 import android.content.Context
 import android.graphics.Color
@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.socialnetwork.R
 
 fun makeToast(context: Context?, message: String) {
 

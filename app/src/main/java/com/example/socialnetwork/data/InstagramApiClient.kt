@@ -1,6 +1,6 @@
 package com.example.socialnetwork.data
 
-import com.example.socialnetwork.Constants
+import com.example.socialnetwork.utils.Constants
 import com.example.socialnetwork.data.model.ModelResponse
 import com.example.socialnetwork.data.model.ProfileInstagram
 import retrofit2.http.GET

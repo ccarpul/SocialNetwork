@@ -1,10 +1,9 @@
 package com.example.socialnetwork.ui.twitter
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.socialnetwork.ResultWrapper
 import com.example.socialnetwork.data.model.ModelTwitter
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -13,7 +12,10 @@ class TwitterViewModel(private val twitterRespository: TwitterRepository) : View
     CoroutineScope {
 
     private var job: Job = Job()
-    var userToken = ""
+
+    var userToken: String? = ""
+    var userTokenSecret: String? = ""
+
     private val dataRestaurerRecycler = arrayListOf<ModelTwitter>()
 
     override val coroutineContext: CoroutineContext
@@ -36,24 +38,11 @@ class TwitterViewModel(private val twitterRespository: TwitterRepository) : View
             return uiModelTwitter
         }
 
-    fun getData() {
+    fun getData(userToken: String?, userTokenSecret: String?) {
         launch {
 
             uiModelTwitter.value = StateLiveData.PreCall
-
-            when (val result = twitterRespository.getDataTwitter(userToken)) {
-
-                is ResultWrapper.Success -> {
-                    uiModelTwitter.value = StateLiveData.RefreshStateUi(result.value)
-                    dataRestaurerRecycler.add(result.value)
-                }
-                is ResultWrapper.NetworkError -> {
-                    Log.d("Test", result.throwable.message())
-                }
-                is ResultWrapper.GenericError -> {
-                    Log.d("Test", result.error)
-                }
-            }
+            twitterRespository.getTimeLineTwitter(userToken, userTokenSecret)
             uiModelTwitter.value = StateLiveData.PostCall
         }
     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph"
-    app:startDestination="@id/loginTwitterFragment">
+    app:startDestination="@id/welcomeFragment">
 
     <fragment
         android:id="@+id/instagramFragment"
@@ -15,9 +15,10 @@
         android:name="com.example.socialnetwork.ui.twitter.TwitterFragment"
         android:label="fragment_twitter"
         tools:layout="@layout/fragment_twitter" >
-        <action
-            android:id="@+id/action_twitterFragment_to_loginTwitterFragment"
-            app:destination="@id/loginTwitterFragment" />
+        <argument
+            android:name="userToken"
+            app:argType="string"
+            android:defaultValue="," />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -26,7 +27,28 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/loginTwitterFragment"
-        android:name="com.example.socialnetwork.ui.login.LoginFragment"
+        android:name="com.example.socialnetwork.ui.instagram.LoginInstagramFragment"
         android:label="login_instagram"
-        tools:layout="@layout/login_layout" />
+        tools:layout="@layout/login_layout" >
+        <action
+            android:id="@+id/action_loginTwitterFragment_to_instagramFragment"
+            app:destination="@id/instagramFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/splash"
+        android:name="com.example.socialnetwork.ui.splash.Splash"
+        android:label="splash"
+        tools:layout="@layout/splash" />
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.socialnetwork.ui.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_loginTwitterFragment"
+            app:destination="@id/loginTwitterFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_twitterFragment"
+            app:destination="@id/twitterFragment" />
+    </fragment>
 </navigation>

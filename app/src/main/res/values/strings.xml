@@ -39,5 +39,7 @@
     <string name="carpul_company" translatable="false">Carpul Company</string>
     <string name="instagram" translatable="false">Instagram</string>
     <string name="endList">End List</string>
+    <string name="go_to_twitter">Go to Twitter</string>
+    <string name="go_to_instagram">Go to Instagram</string>
 
 </resources>

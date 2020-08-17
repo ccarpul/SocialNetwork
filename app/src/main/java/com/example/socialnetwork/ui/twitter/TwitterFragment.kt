@@ -1,10 +1,7 @@
 package com.example.socialnetwork.ui.twitter
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
 import com.example.socialnetwork.adapter.AdapterRecyclerTwitter
-import com.example.socialnetwork.hide
-import com.example.socialnetwork.show
+import com.example.socialnetwork.utils.hide
+import com.example.socialnetwork.utils.show
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.*
 import com.squareup.picasso.Picasso
@@ -25,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_instagram.userName
 import kotlinx.android.synthetic.main.fragment_twitter.*
 import kotlinx.android.synthetic.main.profile_style.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.prefs.Preferences
 
 class TwitterFragment : Fragment() {
 
@@ -35,6 +31,8 @@ class TwitterFragment : Fragment() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var adapterRecycler: AdapterRecyclerTwitter = AdapterRecyclerTwitter(arrayListOf())
+    private var userToken: String? = ""
+    private var userTokenSecret: String? = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,9 +40,12 @@ class TwitterFragment : Fragment() {
         if (auth.currentUser == null) {
             findNavController().apply {
                 popBackStack()
-                navigate(R.id.loginTwitterFragment)
+                navigate(R.id.welcomeFragment)
             }
         }
+
+        getTokens()
+
         twitterViewModel.modelTwitter.observe(this, Observer(::upDateUi))
     }
 
@@ -57,8 +58,12 @@ class TwitterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         setupRecyclerView()
         toolBar = (activity as MainActivity).toolBar
+        toolBar.show()
+
         val user = auth.currentUser?.displayName
         toolBar.title = getString(R.string.TitleSocialNetwork) + user
         userName.text = user ?: getString(R.string.twitter)
@@ -74,7 +79,7 @@ class TwitterFragment : Fragment() {
     fun upDateUi(state: TwitterViewModel.StateLiveData){
         when (state) {
             is TwitterViewModel.StateLiveData.InitialStateUi -> {
-                twitterViewModel.getData()
+                twitterViewModel.getData(userToken, userTokenSecret)
             }
             is TwitterViewModel.StateLiveData.PreCall -> {
                 progressBarTw.show()
@@ -102,5 +107,11 @@ class TwitterFragment : Fragment() {
             layoutManager = linearLayoutManager
             adapter = adapterRecycler
         }
+    }
+
+    private fun getTokens() {
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        userToken = sharedPref.getString("userToken","")
+        userTokenSecret = sharedPref.getString("userTokenSecret", "")
     }
 }

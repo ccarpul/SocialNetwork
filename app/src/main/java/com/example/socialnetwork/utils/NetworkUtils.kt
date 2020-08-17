@@ -1,9 +1,7 @@
-package com.example.socialnetwork
+package com.example.socialnetwork.utils
 
 import android.content.Context
-import com.example.socialnetwork.ui.login.LoginViewModel
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
+import com.example.socialnetwork.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.Response
@@ -24,28 +22,34 @@ sealed class myResult<out T> {
     }
 }
 
-fun Task<AuthResult>.AuthResult(token: String, provider: String) =
-    if (this.isSuccessful) {
-        LoginViewModel.StateLiveData.RefreshUi(myResult.Success(provider) ,token)}
-    else {
-        if (this.exception != null)
-            LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError(this.exception.toString()),"")
-        else  LoginViewModel.StateLiveData.RefreshUi(myResult.GenericError("Error"), "")
-    }
-
 fun firebaseErrors(error: String?, context: Context) {
 
     when (error) {
         context.getString(R.string.networkError) ->
-            makeToast(context, "Please check your conection")
+            makeToast(
+                context,
+                "Please check your conection"
+            )
         context.getString(R.string.formatError) ->
-            makeToast(context, "Please check your Email format")
+            makeToast(
+                context,
+                "Please check your Email format"
+            )
         context.getString(R.string.emailInUse) ->
-            makeToast(context, "Email in use try to login with Google account")
-        context.getString(R.string.apiException) -> makeToast(context, "Choice an option")
+            makeToast(
+                context,
+                "Email in use try to login with Google account"
+            )
+        context.getString(R.string.apiException) -> makeToast(
+            context,
+            "Choice an option"
+        )
         context.getString(R.string.cancelByUser) ->
             makeToast(context, "cancel by user")
-        else -> makeToast(context, context.getString(R.string.loginFailed))
+        else -> makeToast(
+            context,
+            context.getString(R.string.loginFailed)
+        )
     }
 }
 
@@ -59,17 +63,28 @@ suspend fun <T> safeApiCall(
         try {
             val response = apiCall.invoke()
             if (response is Response && !response.isSuccessful) {
-                ResultWrapper.GenericError(null, response.message())
+                ResultWrapper.GenericError(
+                    null,
+                    response.message()
+                )
             } else ResultWrapper.Success(response)
 
         } catch (throwable: Throwable) {
             when (throwable) {
                 is IOException ->
-                    ResultWrapper.GenericError(null, "${throwable.localizedMessage}")
+                    ResultWrapper.GenericError(
+                        null,
+                        "${throwable.localizedMessage}"
+                    )
                 is HttpException ->
-                    ResultWrapper.NetworkError(throwable)
+                    ResultWrapper.NetworkError(
+                        throwable
+                    )
                 else ->
-                    ResultWrapper.GenericError(null, "${throwable.localizedMessage}")
+                    ResultWrapper.GenericError(
+                        null,
+                        "${throwable.localizedMessage}"
+                    )
             }
         }
     }

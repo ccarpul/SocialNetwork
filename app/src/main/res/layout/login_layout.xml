@@ -14,7 +14,7 @@
         android:id="@+id/appCompatImageView2"
         android:layout_width="112dp"
         android:layout_height="103dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:id="@+id/appCompatImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
         android:text="@string/app_name"
         android:textColor="@color/white"
@@ -34,52 +34,28 @@
         app:layout_constraintEnd_toEndOf="@+id/appCompatImageView2"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/appCompatImageView2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView2" />
 
-    <LinearLayout
-        android:id="@+id/relativeLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="52dp"
-        android:background="@drawable/custom_bg_registerbutton"
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/buttonFacebook"
+        android:layout_width="335dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="92dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView">
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/buttonFacebook"
-            android:layout_width="335dp"
-            android:layout_height="0dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"/>
-
-        <TextView
-            android:id="@+id/textViewTwitter"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="335dp"
-            android:layout_height="28dp"
-            android:background="#3b5998"
-            android:drawableStart="@drawable/ic_twitter"
-            android:gravity="center"
-            android:text="@string/continue_with_twitter"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/progressbarLayout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progressbarLayout"
         android:layout_width="92dp"
         android:layout_height="39dp"
-        android:layout_marginTop="40dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView">
 
         <TextView
             android:layout_width="wrap_content"

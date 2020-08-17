@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.*
 import com.example.socialnetwork.adapter.AdapterRecyclerView
+import com.example.socialnetwork.utils.hide
+import com.example.socialnetwork.utils.isLastArticleDisplayed
+import com.example.socialnetwork.utils.makeToast
+import com.example.socialnetwork.utils.show
 import com.facebook.AccessToken
 import com.facebook.Profile
 import com.google.android.material.appbar.MaterialToolbar
@@ -64,6 +68,7 @@ class InstagramFragment : Fragment() {
         setupRecyclerView()
         onScrollTopNews()
         toolBar = (activity as MainActivity).toolBar
+        toolBar.show()
         toolBar.title = getString(R.string.TitleSocialNetwork) + profile?.firstName
     }
 
@@ -84,7 +89,10 @@ class InstagramFragment : Fragment() {
                 if (instagramRecyclerView.isLastArticleDisplayed(linearLayoutManager)) {
                     if (instagramViewModel.mediaCount - instagramViewModel.pos >= 4)
                         instagramViewModel.getData()
-                    else makeToast(requireContext(), getString(R.string.endList))
+                    else makeToast(
+                        requireContext(),
+                        getString(R.string.endList)
+                    )
                 }
             }
         })
