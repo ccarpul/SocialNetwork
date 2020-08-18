@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.socialnetwork.utils.ResultWrapper
 import com.example.socialnetwork.data.model.ModelResponse
 import com.example.socialnetwork.data.model.ProfileInstagram
+import com.example.socialnetwork.utils.ResultWrapper
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
+
 
 class InstagramViewModel(private val instagramRespository: InstagramRespository): ViewModel(), CoroutineScope {
 
@@ -17,7 +18,6 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
     var mediaCount=0
     var after =""
     private val dataRestaurerRecycler = arrayListOf<ModelResponse>()
-
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -39,12 +39,12 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
             return uiModelInstagram
         }
 
-    fun getData() {
+    fun getData(code: String) {
 
         launch {
 
             uiModelInstagram.value = StateLiveData.PreCall
-            when (val result =  instagramRespository.getDataInstagram(after)) {
+            when (val result =  instagramRespository.getDataInstagram(after, code)) {
                 is ResultWrapper.Success      -> {
                     after = if (mediaCount - pos >= 4) result.value.paging.cursors.after else ""
                     uiModelInstagram.value = StateLiveData.RefreshStateUi(result.value)
@@ -57,12 +57,12 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
         }
     }
 
-    fun getProfile() {
+    fun getProfile(code: String) {
 
         launch {
 
             uiModelInstagram.value = StateLiveData.PreCall
-            when (val result = instagramRespository.getProfileInstagram()) {
+            when (val result = instagramRespository.getProfileInstagram(code)) {
                 is ResultWrapper.Success      -> {
                     uiModelInstagram.value = StateLiveData.RefreshStateProfile(result.value)
                     mediaCount = result.value.media_count
@@ -73,6 +73,7 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
             uiModelInstagram.value = StateLiveData.PostCall
         }
     }
+
     init { job = SupervisorJob() }
 
     override fun onCleared() {

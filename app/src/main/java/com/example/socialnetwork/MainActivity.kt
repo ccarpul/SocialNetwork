@@ -38,5 +38,6 @@ class MainActivity : AppCompatActivity() {
             itemTextColor = ColorStateList.valueOf(resources.getColor(R.color.black))
             itemIconTintList = ColorStateList.valueOf(resources.getColor(R.color.black))
         }
+
     }
 }

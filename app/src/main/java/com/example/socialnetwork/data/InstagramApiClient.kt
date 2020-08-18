@@ -3,15 +3,20 @@ package com.example.socialnetwork.data
 import com.example.socialnetwork.utils.Constants
 import com.example.socialnetwork.data.model.ModelResponse
 import com.example.socialnetwork.data.model.ProfileInstagram
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.example.socialnetwork.ui.accesstoken.ModelAccessToken
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 interface InstagramApiClient {
 
-    @GET("${Constants.ENDPOINT_MEDIA}${Constants.APIKEY}")
-    suspend fun getMedia(@Query("after") after: String): ModelResponse
+    @GET(Constants.ENDPOINT_MEDIA)
+    suspend fun getMedia(
+        @Query("after") after: String,
+        @Query("access_token") code: String
+    ): ModelResponse
 
-    @GET("${Constants.ENDPOINT_ME}${Constants.APIKEY}")
-    suspend fun getProfile(): ProfileInstagram
+    @GET(Constants.ENDPOINT_ME)
+    suspend fun getProfile(@Query("access_token") code: String): ProfileInstagram
+
 
 }

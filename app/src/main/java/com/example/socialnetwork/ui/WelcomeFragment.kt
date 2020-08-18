@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
+import com.example.socialnetwork.utils.Constants
 import com.example.socialnetwork.utils.hide
 import com.example.socialnetwork.utils.makeToast
 import com.google.android.gms.tasks.Task
@@ -28,11 +29,6 @@ class WelcomeFragment : Fragment() {
     private var userTokenSecret: String? = null
     private lateinit var toolBar: MaterialToolbar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,6 +45,7 @@ class WelcomeFragment : Fragment() {
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         textViewTwitter.setOnClickListener {
+
             if (firebaseAuth.currentUser == null) {
 
                 setLoginByTwitter().addOnCompleteListener {
@@ -81,6 +78,17 @@ class WelcomeFragment : Fragment() {
                 findNavController().navigate(passTokens)
                 Log.i("Carpul", "onViewCreated: $userToken , $userTokenSecret")
 
+            }
+        }
+
+        textViewInstagram.setOnClickListener {
+            val accessTokenInstagram = sharedPref.getString("accessTokenInstagram", "")
+            if (accessTokenInstagram == "") {
+                val passUrl = WelcomeFragmentDirections
+                    .actionWelcomeFragmentToLoginInstagramFragment(Constants.URL_INSTAGRAM_AUTH)
+                findNavController().navigate(passUrl)
+            } else {
+                findNavController().navigate(R.id.instagramFragment)
             }
         }
     }

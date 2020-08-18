@@ -1,6 +1,7 @@
 package com.example.socialnetwork.utils
 
 import android.content.Context
+import android.util.Log
 import com.example.socialnetwork.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -67,7 +68,8 @@ suspend fun <T> safeApiCall(
                     null,
                     response.message()
                 )
-            } else ResultWrapper.Success(response)
+            } else {
+                ResultWrapper.Success(response)}
 
         } catch (throwable: Throwable) {
             when (throwable) {

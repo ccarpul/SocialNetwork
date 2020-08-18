@@ -9,7 +9,9 @@
         android:id="@+id/instagramFragment"
         android:name="com.example.socialnetwork.ui.instagram.InstagramFragment"
         android:label="fragment_instagram"
-        tools:layout="@layout/fragment_instagram" />
+        tools:layout="@layout/fragment_instagram" >
+        <argument android:name="code" />
+    </fragment>
     <fragment
         android:id="@+id/twitterFragment"
         android:name="com.example.socialnetwork.ui.twitter.TwitterFragment"
@@ -26,12 +28,15 @@
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/loginTwitterFragment"
-        android:name="com.example.socialnetwork.ui.instagram.LoginInstagramFragment"
+        android:id="@+id/loginInstagramFragment"
+        android:name="com.example.socialnetwork.ui.accesstoken.LoginInstagramFragment"
         android:label="login_instagram"
-        tools:layout="@layout/login_layout" >
+        tools:layout="@layout/fragment_login_instagram" >
+        <argument
+            android:name="urlAuthInstagram"
+            app:argType="string" />
         <action
-            android:id="@+id/action_loginTwitterFragment_to_instagramFragment"
+            android:id="@+id/action_loginInstagramFragment_to_instagramFragment"
             app:destination="@id/instagramFragment" />
     </fragment>
     <activity
@@ -45,10 +50,11 @@
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
-            android:id="@+id/action_welcomeFragment_to_loginTwitterFragment"
-            app:destination="@id/loginTwitterFragment" />
-        <action
             android:id="@+id/action_welcomeFragment_to_twitterFragment"
             app:destination="@id/twitterFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_loginInstagramFragment"
+            app:destination="@id/loginInstagramFragment" />
+
     </fragment>
 </navigation>

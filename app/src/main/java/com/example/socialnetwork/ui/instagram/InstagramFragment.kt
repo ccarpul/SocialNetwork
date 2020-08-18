@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.*
 import com.example.socialnetwork.adapter.AdapterRecyclerView
-import com.example.socialnetwork.utils.hide
-import com.example.socialnetwork.utils.isLastArticleDisplayed
-import com.example.socialnetwork.utils.makeToast
-import com.example.socialnetwork.utils.show
+import com.example.socialnetwork.utils.*
 import com.facebook.AccessToken
 import com.facebook.Profile
 import com.google.android.material.appbar.MaterialToolbar
@@ -34,23 +31,16 @@ class InstagramFragment : Fragment() {
     private var isLoggedIn = false
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var adapterRecycler: AdapterRecyclerView = AdapterRecyclerView(arrayListOf())
+    var code = ""
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        code = sharedPref.getString("accessToken","") ?: ""
 
-        try {
-            accessToken = AccessToken.getCurrentAccessToken()
-            profile = Profile.getCurrentProfile()
-            isLoggedIn = accessToken != null
-
-        } catch (e: Exception) {
-            Log.i("Carpul", "$e")
-            findNavController().navigate(R.id.loginTwitterFragment)
-        }
-
-        if (!isLoggedIn) findNavController().navigate(R.id.loginTwitterFragment)
+        Log.i("Carpul", "onAttach: $code")
 
         instagramViewModel.modelInstagram.observe(this, Observer(::upDateUi))
     }
@@ -88,7 +78,7 @@ class InstagramFragment : Fragment() {
                 instagramViewModel.pos = adapterRecycler.getPosition()
                 if (instagramRecyclerView.isLastArticleDisplayed(linearLayoutManager)) {
                     if (instagramViewModel.mediaCount - instagramViewModel.pos >= 4)
-                        instagramViewModel.getData()
+                        instagramViewModel.getData(code)
                     else makeToast(
                         requireContext(),
                         getString(R.string.endList)
@@ -101,8 +91,8 @@ class InstagramFragment : Fragment() {
     private fun upDateUi(state: InstagramViewModel.StateLiveData) {
         when (state) {
             is InstagramViewModel.StateLiveData.InitialStateUi -> {
-                instagramViewModel.getData()
-                instagramViewModel.getProfile()
+                instagramViewModel.getData(code)
+                instagramViewModel.getProfile(code)
             }
             is InstagramViewModel.StateLiveData.PreCall -> {
                 progressBarIg.show()
@@ -115,7 +105,7 @@ class InstagramFragment : Fragment() {
                 progressBarIg.hide()
             }
             is InstagramViewModel.StateLiveData.RefreshStateProfile -> {
-                userName.text = "@${state.response.username}"
+                //userName.text = "@${state.response.username}"
             }
             is InstagramViewModel.StateLiveData.AdapterRecycler -> {
                 for (data in state.dataRecyclerView)

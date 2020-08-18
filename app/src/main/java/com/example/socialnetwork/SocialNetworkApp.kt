@@ -1,6 +1,7 @@
 package com.example.socialnetwork
 
 import android.app.Application
+import com.example.socialnetwork.di.DependenciesModuleAccessToken
 import com.example.socialnetwork.di.DependenciesModuleInstagram
 import com.example.socialnetwork.di.DependenciesModuleTwitter
 import org.koin.android.ext.koin.androidContext
@@ -16,7 +17,7 @@ class SocialNetworkApp: Application() {
         mApp = this
         startKoin {
             androidContext(this@SocialNetworkApp)
-            modules(listOf(DependenciesModuleTwitter, DependenciesModuleInstagram))
+            modules(listOf(DependenciesModuleTwitter, DependenciesModuleInstagram, DependenciesModuleAccessToken))
         }
     }
 
