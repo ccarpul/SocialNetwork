@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.text.TextUtils.indexOf
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -14,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -24,6 +24,7 @@ import com.example.socialnetwork.R
 import com.example.socialnetwork.adapter.AdapterRecyclerTwitter
 import com.example.socialnetwork.utils.getClearImageUrl
 import com.example.socialnetwork.utils.hide
+import com.example.socialnetwork.utils.isLastArticleDisplayed
 import com.example.socialnetwork.utils.show
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.*
@@ -80,6 +81,13 @@ class TwitterFragment : Fragment() {
         setupRecyclerView()
         setupToolbar()
         setupNavigationView()
+        onScrollTwitter()
+
+        swipeRefreshTwitter.setOnRefreshListener {
+            twitterViewModel.page = 1
+            adapterRecycler.cleanList()
+            twitterViewModel.getData(userToken, userTokenSecret)
+        }
     }
 
     private fun upDateUi(state: TwitterViewModel.StateLiveData) {
@@ -95,6 +103,7 @@ class TwitterFragment : Fragment() {
             }
             is TwitterViewModel.StateLiveData.PostCall -> {
                 progressBarTw.hide()
+                swipeRefreshTwitter.isRefreshing = false
             }
             is TwitterViewModel.StateLiveData.RefreshStateProfile -> {
                 userName.text = "@${state.response}"
@@ -124,7 +133,7 @@ class TwitterFragment : Fragment() {
         (activity as MainActivity).imageProviderToolbar.show()
         userNameToolbar.text = auth.currentUser?.displayName
         if (auth.currentUser?.email == "") userScreenNameToolbar.hide()
-        else userScreenNameToolbar.apply{
+        else userScreenNameToolbar.apply {
             text = auth.currentUser?.email
             show()
         }
@@ -155,5 +164,20 @@ class TwitterFragment : Fragment() {
             .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
             .placeholder(R.mipmap.ic_launcher_foreground)
             .into(imageNavigationHeader)
+    }
+
+    private fun onScrollTwitter() {
+        twitterRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                twitterViewModel.pos = adapterRecycler.getPosition()
+                if (twitterRecyclerView.isLastArticleDisplayed(linearLayoutManager)) {
+                    twitterViewModel.page++
+                    twitterViewModel.getData(userToken, userTokenSecret)
+
+                }
+            }
+        })
     }
 }

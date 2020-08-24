@@ -21,6 +21,7 @@ class TwitterViewModel(private val twitterRespository: TwitterRepository) : View
     private var job: Job = Job()
 
     var page = 1
+    var pos = 0
 
     private  lateinit var dataRestorerRecycler: ResponseList<Status>
 

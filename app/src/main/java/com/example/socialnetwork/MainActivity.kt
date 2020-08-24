@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
         makeNavigationViewDrawer()
 
         val navController = findNavController(R.id.navHostFragment)

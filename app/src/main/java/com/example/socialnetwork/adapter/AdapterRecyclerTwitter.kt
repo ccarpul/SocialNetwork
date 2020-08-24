@@ -1,7 +1,5 @@
 package com.example.socialnetwork.adapter
 
-import android.text.TextUtils.lastIndexOf
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +35,10 @@ class AdapterRecyclerTwitter(
 
     fun getPosition(): Int {
         return pos
+    }
+
+    fun cleanList(){
+        listUserTweet = mutableListOf()
     }
 
     fun getOriginalList(): MutableList<Status> {
