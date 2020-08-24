@@ -5,6 +5,10 @@ import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import twitter4j.Paging
+import twitter4j.Twitter
+import twitter4j.TwitterFactory
+import twitter4j.conf.ConfigurationBuilder
 
 
 fun getApiServiceInstagram(): InstagramApiClient {
@@ -32,12 +36,12 @@ fun getOkHttpClientAccessToken(): OkHttpClient {
 }
 
 
-fun getAccessTokenInstagram(): InstagramAccessTokenClient{
+fun getAccessTokenInstagram(): AccessTokenClient{
     return Retrofit.Builder()
         .baseUrl("https://api.instagram.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .client(getOkHttpClientAccessToken())
         .build().run {
-            create(InstagramAccessTokenClient::class.java)
+            create(AccessTokenClient::class.java)
         }
 }

@@ -3,7 +3,7 @@ package com.example.socialnetwork.ui.instagram
 import com.example.socialnetwork.utils.ResultWrapper
 import com.example.socialnetwork.data.InstagramApiClient
 import com.example.socialnetwork.data.model.ModelResponse
-import com.example.socialnetwork.data.model.ProfileInstagram
+import com.example.socialnetwork.data.model.ModelResponseProfileInstagram
 import com.example.socialnetwork.utils.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,7 +19,7 @@ class InstagramRespository(private val instagramApiClient: InstagramApiClient) {
                 }
             }
     suspend fun getProfileInstagram(code: String):
-            ResultWrapper<ProfileInstagram> =
+            ResultWrapper<ModelResponseProfileInstagram> =
         withContext(Dispatchers.IO) {
             safeApiCall(dispatcher) {
                 instagramApiClient.getProfile(code)

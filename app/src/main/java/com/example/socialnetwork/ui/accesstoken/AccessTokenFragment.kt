@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,11 +20,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login_instagram.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class LoginInstagramFragment : Fragment(), AuthInstagramListener {
+class AccessTokenFragment : Fragment(), AccessTokenListener {
 
     private val accessTokenViewModel: AccessTokenViewModel by viewModel()
     private val callbackManager = CallbackManager.Factory.create()
-    private lateinit var listener: AuthInstagramListener
+    private lateinit var listener: AccessTokenListener
     private lateinit var sharedPref: SharedPreferences
 
     private lateinit var toolBar: MaterialToolbar
@@ -47,7 +46,7 @@ class LoginInstagramFragment : Fragment(), AuthInstagramListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolBar = (activity as MainActivity).toolBar
+        toolBar = (activity as MainActivity).toolbar
         toolBar.hide()
         toolBar.title = getString(R.string.welcome)
 
@@ -105,7 +104,7 @@ class LoginInstagramFragment : Fragment(), AuthInstagramListener {
             is AccessTokenViewModel.StateLiveData.RefreshStateUi -> {
 
                 with(sharedPref.edit()) {
-                    putString("accessToken", state.response.access_token)
+                    putString("accessTokenInstagram", state.response.access_token)
                     commit()
                 }
             }

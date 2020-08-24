@@ -2,7 +2,6 @@ package com.example.socialnetwork.ui.instagram
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,9 +37,9 @@ class InstagramFragment : Fragment() {
         super.onAttach(context)
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        code = sharedPref.getString("accessToken","") ?: ""
+        code = sharedPref.getString("accessTokenInstagram","") ?: ""
 
-        Log.i("Carpul", "onAttach: $code")
+        if(code == "") findNavController().navigate(R.id.welcomeFragment)
 
         instagramViewModel.modelInstagram.observe(this, Observer(::upDateUi))
     }
@@ -57,7 +56,7 @@ class InstagramFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         onScrollTopNews()
-        toolBar = (activity as MainActivity).toolBar
+        toolBar = (activity as MainActivity).toolbar
         toolBar.show()
         toolBar.title = getString(R.string.TitleSocialNetwork) + profile?.firstName
     }

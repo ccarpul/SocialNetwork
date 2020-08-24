@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.socialnetwork.ui.instagram.InstagramViewModel
+import com.example.socialnetwork.data.model.ModelResponseAccessToken
 import com.example.socialnetwork.utils.Constants
 import com.example.socialnetwork.utils.ResultWrapper
 import kotlinx.coroutines.*
@@ -24,9 +24,9 @@ class AccessTokenViewModel(private val accessTokenRepository: AccessTokenReposit
 
 
     private val clientId: RequestBody =
-        RequestBody.create(MediaType.parse("text/plain"), Constants.ID_APP)
+        RequestBody.create(MediaType.parse("text/plain"), Constants.CONSUMER_ID_INSTAGRAM)
     private val clientSecret: RequestBody =
-        RequestBody.create(MediaType.parse("text/plain"), Constants.SECRET_KEY_INSTAGRAM)
+        RequestBody.create(MediaType.parse("text/plain"), Constants.CONSUMER_SECRET_INSTAGRAM)
     private val redirectUri: RequestBody =
         RequestBody.create(MediaType.parse("text/plain"), Constants.URI_REDIRECT)
     private val grantType: RequestBody =
@@ -34,7 +34,7 @@ class AccessTokenViewModel(private val accessTokenRepository: AccessTokenReposit
 
     sealed class StateLiveData {
         object PreCall : StateLiveData()
-        class RefreshStateUi(val response: ModelAccessToken) : StateLiveData()
+        class RefreshStateUi(val response: ModelResponseAccessToken) : StateLiveData()
         object PostCall : StateLiveData()
     }
 
@@ -62,9 +62,7 @@ class AccessTokenViewModel(private val accessTokenRepository: AccessTokenReposit
 
     }
 
-    init {
-        job = SupervisorJob()
-    }
+    init { job = SupervisorJob() }
 
     override fun onCleared() {
         job.cancel()

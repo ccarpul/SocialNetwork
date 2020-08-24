@@ -1,5 +1,5 @@
 package com.example.socialnetwork.ui.accesstoken
 
-interface AuthInstagramListener {
+interface AccessTokenListener {
     fun onCodeReceived(auth_code: String)
 }

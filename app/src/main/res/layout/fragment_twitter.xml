@@ -28,8 +28,6 @@
 
 </FrameLayout>
 
-    <include layout="@layout/profile_style"></include>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/twitterRecyclerView"
         android:layout_width="match_parent"

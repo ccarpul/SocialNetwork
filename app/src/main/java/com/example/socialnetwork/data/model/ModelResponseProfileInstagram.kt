@@ -1,6 +1,6 @@
 package com.example.socialnetwork.data.model
 
-data class ProfileInstagram(
+data class ModelResponseProfileInstagram(
     val id: String,
     val media_count: Int,
     val username: String

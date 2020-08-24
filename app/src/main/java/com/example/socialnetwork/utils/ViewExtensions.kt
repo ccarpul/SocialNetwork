@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -11,7 +12,13 @@ import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.socialnetwork.R
+import kotlinx.android.synthetic.main.recycler_style_twitter.view.*
+import twitter4j.MediaEntity
+import twitter4j.Status
 
 fun makeToast(context: Context?, message: String) {
 
@@ -28,9 +35,13 @@ fun makeToast(context: Context?, message: String) {
     }
 }
 
-fun View.hide(){ isVisible = false}  //Using KTX
+fun View.hide() {
+    isVisible = false
+}  //Using KTX
 
-fun View.show(){ isVisible = true }
+fun View.show() {
+    isVisible = true
+}
 
 fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager): Boolean {
 
@@ -43,3 +54,15 @@ fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager
     }
     return false
 }
+
+
+fun mediaEntity(tweet: Status): MediaEntity? {
+    return if (tweet.retweetedStatus != null) {
+        if (!tweet.retweetedStatus.mediaEntities.isNullOrEmpty())
+            tweet.retweetedStatus.mediaEntities[0]
+        else null
+    } else if (!tweet.mediaEntities.isNullOrEmpty())
+        tweet.mediaEntities[0]
+    else null
+}
+

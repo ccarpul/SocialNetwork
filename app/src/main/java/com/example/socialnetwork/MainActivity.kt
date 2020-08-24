@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolBar)
+        setSupportActionBar(toolbar)
 
         makeNavigationViewDrawer()
 
@@ -28,11 +28,11 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getDrawable(this, R.drawable.ic_hamburger_24)
         val drawer: DrawerLayout = findViewById(R.id.drawer)
         val toggle = ActionBarDrawerToggle(
-            this, drawer, toolBar, R.string.app_name, R.string.app_name
+            this, drawer, toolbar, R.string.app_name, R.string.app_name
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
-        toolBar.navigationIcon = iconMenuNavigation
+        toolbar.navigationIcon = iconMenuNavigation
         navDrawer.apply {
             setBackgroundColor(resources.getColor(R.color.white))
             itemTextColor = ColorStateList.valueOf(resources.getColor(R.color.black))

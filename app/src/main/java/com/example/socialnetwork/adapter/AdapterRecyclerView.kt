@@ -48,7 +48,6 @@ class AdapterRecyclerView(
     }
 
     inner class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var url: String = ""
         fun bind(data: Data) {
 
             itemView.apply {

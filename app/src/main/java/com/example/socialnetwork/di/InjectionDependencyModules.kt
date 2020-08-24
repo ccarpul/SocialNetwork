@@ -14,6 +14,7 @@ import org.koin.dsl.module
 val DependenciesModuleTwitter = module {
     viewModel { TwitterViewModel(get()) }
     single { TwitterRepository() }
+
 }
 
 val DependenciesModuleInstagram = module {

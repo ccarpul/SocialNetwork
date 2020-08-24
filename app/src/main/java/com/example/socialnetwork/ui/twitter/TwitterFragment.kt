@@ -1,33 +1,49 @@
 package com.example.socialnetwork.ui.twitter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.text.TextUtils.indexOf
+import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
 import com.example.socialnetwork.adapter.AdapterRecyclerTwitter
+import com.example.socialnetwork.utils.getClearImageUrl
 import com.example.socialnetwork.utils.hide
 import com.example.socialnetwork.utils.show
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.*
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_instagram.userName
 import kotlinx.android.synthetic.main.fragment_twitter.*
+import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.profile_style.*
+import kotlinx.android.synthetic.main.profile_style.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import kotlin.math.log
 
 class TwitterFragment : Fragment() {
 
     private val twitterViewModel: TwitterViewModel by viewModel()
-
-    private lateinit var toolBar: MaterialToolbar
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var userNameToolbar: TextView
+    private lateinit var userScreenNameToolbar: TextView
+    private lateinit var imageNavigationHeader: AppCompatImageView
+    private lateinit var textHeaderTitle: TextView
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var adapterRecycler: AdapterRecyclerTwitter = AdapterRecyclerTwitter(arrayListOf())
@@ -36,6 +52,11 @@ class TwitterFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        toolbar = (activity as MainActivity).toolbar
+        userNameToolbar = toolbar.userNameToolbar
+        userScreenNameToolbar = toolbar.screenNameToolbar
+        imageNavigationHeader = (activity as MainActivity).imageHeadNavigation
+        textHeaderTitle = (activity as MainActivity).textHeaderTitle
 
         if (auth.currentUser == null) {
             findNavController().apply {
@@ -43,15 +64,12 @@ class TwitterFragment : Fragment() {
                 navigate(R.id.welcomeFragment)
             }
         }
-
         getTokens()
-
         twitterViewModel.modelTwitter.observe(this, Observer(::upDateUi))
     }
 
-        override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_twitter, container, false)
     }
@@ -59,24 +77,12 @@ class TwitterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         setupRecyclerView()
-        toolBar = (activity as MainActivity).toolBar
-        toolBar.show()
-
-        val user = auth.currentUser?.displayName
-        toolBar.title = getString(R.string.TitleSocialNetwork) + user
-        userName.text = user ?: getString(R.string.twitter)
-         if( auth.currentUser?.photoUrl != null) {
-             Picasso.with(requireContext()).load(auth.currentUser?.photoUrl)
-                 .placeholder(R.mipmap.ic_launcher_foreground)
-                 .resize(40, 40)
-                 .centerCrop()
-                 .into(userPicture)
-         }else userPicture.setImageDrawable(resources.getDrawable(R.mipmap.ic_launcher))
-
+        setupToolbar()
+        setupNavigationView()
     }
-    fun upDateUi(state: TwitterViewModel.StateLiveData){
+
+    private fun upDateUi(state: TwitterViewModel.StateLiveData) {
         when (state) {
             is TwitterViewModel.StateLiveData.InitialStateUi -> {
                 twitterViewModel.getData(userToken, userTokenSecret)
@@ -85,7 +91,6 @@ class TwitterFragment : Fragment() {
                 progressBarTw.show()
             }
             is TwitterViewModel.StateLiveData.RefreshStateUi -> {
-
                 adapterRecycler.addData(state.response)
             }
             is TwitterViewModel.StateLiveData.PostCall -> {
@@ -95,8 +100,7 @@ class TwitterFragment : Fragment() {
                 userName.text = "@${state.response}"
             }
             is TwitterViewModel.StateLiveData.AdapterRecycler -> {
-                for (data in state.dataRecyclerView)
-                    adapterRecycler.addData(data)
+                adapterRecycler.addData(state.dataRecyclerView)
             }
         }
     }
@@ -111,7 +115,45 @@ class TwitterFragment : Fragment() {
 
     private fun getTokens() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        userToken = sharedPref.getString("userToken","")
+        userToken = sharedPref.getString("userToken", "")
         userTokenSecret = sharedPref.getString("userTokenSecret", "")
+
+    }
+
+    private fun setupToolbar() {
+        (activity as MainActivity).imageProviderToolbar.show()
+        userNameToolbar.text = auth.currentUser?.displayName
+        if (auth.currentUser?.email == "") userScreenNameToolbar.hide()
+        else userScreenNameToolbar.apply{
+            text = auth.currentUser?.email
+            show()
+        }
+
+        if (auth.currentUser?.photoUrl != null) {
+            Glide.with(toolbar.context).asBitmap()
+                .load(auth.currentUser?.photoUrl.toString().getClearImageUrl())
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
+                .into(object : SimpleTarget<Bitmap>(140, 140) {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        toolbar.navigationIcon = BitmapDrawable(resources, resource)
+                    }
+                })
+        } else toolbar.navigationIcon =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_hamburger_24)
+
+        toolbar.show()
+    }
+
+    private fun setupNavigationView() {
+
+        textHeaderTitle.text = auth.currentUser?.displayName ?: getString(R.string.app_name)
+        Glide.with(requireActivity())
+            .load(auth.currentUser?.photoUrl.toString().getClearImageUrl())
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
+            .placeholder(R.mipmap.ic_launcher_foreground)
+            .into(imageNavigationHeader)
     }
 }

@@ -3,9 +3,9 @@ package com.example.socialnetwork.utils
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.example.socialnetwork.ui.accesstoken.AuthInstagramListener
+import com.example.socialnetwork.ui.accesstoken.AccessTokenListener
 
-class MyWebViewClient(private val listener: AuthInstagramListener) : WebViewClient() {
+class MyWebViewClient(private val listener: AccessTokenListener) : WebViewClient() {
 
     override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
         Log.i("Carpul", "shouldOverrideUrlLoading: $url")

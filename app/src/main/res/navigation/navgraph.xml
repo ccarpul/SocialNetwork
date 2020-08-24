@@ -29,7 +29,7 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/loginInstagramFragment"
-        android:name="com.example.socialnetwork.ui.accesstoken.LoginInstagramFragment"
+        android:name="com.example.socialnetwork.ui.accesstoken.AccessTokenFragment"
         android:label="login_instagram"
         tools:layout="@layout/fragment_login_instagram" >
         <argument

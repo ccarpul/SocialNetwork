@@ -1,119 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="15dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginEnd="15dp"
-    android:layout_marginBottom="5dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="0dp">
+    android:layout_marginTop="1dp"
+    android:padding="10dp"
+    android:background="@color/backgroundCardView">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/retweetUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/backgroundCardView"
-        android:paddingStart="12dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="12dp">
+        android:layout_marginStart="32dp"
+        android:drawableLeft="@drawable/ic_retweet"
+        android:gravity="center_vertical"
+        android:padding="2dp"
+        android:textColor="#4F5555"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tool:text="User Name Retweeted" />
 
-        <TextView
-            android:id="@+id/screenName"
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:padding="2dp"
-            android:textColor="#4F5555"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/user"
-            app:layout_constraintTop_toTopOf="parent"
-            tool:text="Screem Name" />
+    <ImageView
+        android:id="@+id/urlToImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/retweetUser"
+        tool:srcCompat="@drawable/ic_profile_default" />
 
-        <TextView
-            android:id="@+id/likesCount"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="120dp"
-            android:drawableLeft="@drawable/ic_outline_favorite_border_24"
-            android:ellipsize="end"
-            android:maxLength="20"
-            android:maxLines="1"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description"
-            tool:ignore="SmallSp"
-            tool:text="0" />
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/urlToImage"
+        app:layout_constraintTop_toBottomOf="@+id/retweetUser"
+        tool:text="User" />
 
-        <ImageView
-            android:id="@+id/urlToImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:contentDescription="TODO"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tool:srcCompat="@tools:sample/backgrounds/scenic" />
+    <TextView
+        android:id="@+id/screenName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#4F5555"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/user"
+        app:layout_constraintTop_toBottomOf="@+id/retweetUser"
+        tool:drawableStart="@drawable/ic_verified_tw"
+        tool:text="\@usarname" />
 
-        <TextView
-            android:id="@+id/description"
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/user"
+        app:layout_constraintTop_toBottomOf="@+id/screenName"
+        tool:text="Text Tweet" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardImageTweet"
+        android:layout_width="340dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="4dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/description">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageTweet"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="11dp"
-            android:layout_marginEnd="8dp"
-            android:padding="2dp"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.48"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/urlToImage"
-            tool:text="Text Tweet" />
+            android:layout_height="match_parent"
+            android:contentDescription="TODO"
+            tool:srcCompat="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/user"
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:padding="2dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/urlToImage"
-            app:layout_constraintTop_toTopOf="parent"
-            tool:text="User" />
+    <TextView
+        android:id="@+id/retweetCount"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="4dp"
+        android:drawableStart="@drawable/ic_retweet"
+        android:ellipsize="end"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardImageTweet"
+        tool:ignore="SmallSp"
+        tool:text="0" />
 
-        <TextView
-            android:id="@+id/retweetCount"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="120dp"
-            android:layout_marginTop="12dp"
-            android:drawableLeft="@drawable/ic_retweet"
-            android:ellipsize="end"
-            android:maxLength="20"
-            android:maxLines="1"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description"
-            tool:ignore="SmallSp"
-            tool:text="0" />
+    <TextView
+        android:id="@+id/likesCount"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="80dp"
+        android:drawableLeft="@drawable/ic_outline_favorite_border_24"
+        android:ellipsize="end"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardImageTweet"
+        tool:ignore="SmallSp"
+        tool:text="0" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package com.example.socialnetwork.data.model
 
-class ModelTwitter : ArrayList<ModelTwitter.ModelTwitterItem>() {
+class ModelResponseTwitter : ArrayList<ModelResponseTwitter.ModelTwitterItem>() {
     data class ModelTwitterItem(
         val retwit_count: Int,
         val text: String,

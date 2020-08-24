@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.socialnetwork.data.model.ModelResponse
-import com.example.socialnetwork.data.model.ProfileInstagram
+import com.example.socialnetwork.data.model.ModelResponseProfileInstagram
 import com.example.socialnetwork.utils.ResultWrapper
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -26,7 +26,7 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
         object InitialStateUi: StateLiveData()
         object PreCall:        StateLiveData()
         class  RefreshStateUi(val response: ModelResponse) : StateLiveData()
-        class  RefreshStateProfile(val response: ProfileInstagram) : StateLiveData()
+        class  RefreshStateProfile(val response: ModelResponseProfileInstagram) : StateLiveData()
         object PostCall:        StateLiveData()
         class AdapterRecycler(val dataRecyclerView: ArrayList<ModelResponse>): InstagramViewModel.StateLiveData()
     }
@@ -68,7 +68,7 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
                     mediaCount = result.value.media_count
                 }
                 is ResultWrapper.NetworkError -> { Log.d("Test", result.throwable.message()) }
-                is ResultWrapper.GenericError -> { Log.d("Test", result.error) }
+                is ResultWrapper.GenericError -> { Log.d("Test", result.error.toString()) }
             }
             uiModelInstagram.value = StateLiveData.PostCall
         }
