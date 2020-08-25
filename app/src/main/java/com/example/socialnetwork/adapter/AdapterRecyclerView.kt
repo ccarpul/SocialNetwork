@@ -51,15 +51,15 @@ class AdapterRecyclerView(
         fun bind(data: Data) {
 
             itemView.apply {
-                description.text = data.caption
+                textTweet.text = data.caption
 
                 if (!data.media_url.isNullOrBlank()) {
                     Picasso.with(itemView.context).load(data.media_url)
                         .placeholder(R.mipmap.ic_launcher_foreground)
                         .resize(360, 280)
                         .centerCrop()
-                        .into(urlToImage)
-                } else urlToImage.setImageDrawable(resources.getDrawable(R.mipmap.ic_launcher))
+                        .into(profilePhotoTwitter)
+                } else profilePhotoTwitter.setImageDrawable(resources.getDrawable(R.mipmap.ic_launcher))
             }
         }
     }

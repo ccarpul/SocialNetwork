@@ -21,6 +21,9 @@
             android:name="userToken"
             app:argType="string"
             android:defaultValue="," />
+        <action
+            android:id="@+id/action_twitterFragment_to_mediaTwitterFragment"
+            app:destination="@id/mediaTwitterFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -56,5 +59,15 @@
             android:id="@+id/action_welcomeFragment_to_loginInstagramFragment"
             app:destination="@id/loginInstagramFragment" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/mediaTwitterFragment"
+        android:name="com.example.socialnetwork.ui.twitter.MediaTwitterFragment"
+        android:label="fragment_media_twitter"
+        tools:layout="@layout/fragment_media_twitter" >
+        <argument
+            android:name="mediaUrl"
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
 </navigation>

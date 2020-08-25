@@ -3,8 +3,8 @@ package com.example.socialnetwork.ui.twitter
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Icon
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
@@ -29,15 +29,15 @@ import com.example.socialnetwork.utils.show
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_instagram.userName
 import kotlinx.android.synthetic.main.fragment_twitter.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.profile_style.*
 import kotlinx.android.synthetic.main.profile_style.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import kotlin.math.log
 
-class TwitterFragment : Fragment() {
+class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet {
 
     private val twitterViewModel: TwitterViewModel by viewModel()
     private lateinit var toolbar: MaterialToolbar
@@ -47,7 +47,8 @@ class TwitterFragment : Fragment() {
     private lateinit var textHeaderTitle: TextView
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var adapterRecycler: AdapterRecyclerTwitter = AdapterRecyclerTwitter(arrayListOf())
+    private var adapterRecycler: AdapterRecyclerTwitter =
+        AdapterRecyclerTwitter(arrayListOf(), this)
     private var userToken: String? = ""
     private var userTokenSecret: String? = ""
 
@@ -130,7 +131,10 @@ class TwitterFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        (activity as MainActivity).imageProviderToolbar.show()
+        (activity as MainActivity).imageProviderToolbar.apply {
+            setImageResource(R.drawable.ic_twitter_white)
+            show()
+        }
         userNameToolbar.text = auth.currentUser?.displayName
         if (auth.currentUser?.email == "") userScreenNameToolbar.hide()
         else userScreenNameToolbar.apply {
@@ -179,5 +183,14 @@ class TwitterFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onClick(mediaUrl: String?, mediaType: String?) {
+
+        val passMediaUrl
+                = TwitterFragmentDirections.actionTwitterFragmentToMediaTwitterFragment()
+            .setMediaUrl("$mediaUrl,$mediaType")
+        findNavController().navigate(passMediaUrl)
+        toolbar.hide()
     }
 }
