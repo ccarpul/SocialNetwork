@@ -68,25 +68,20 @@ suspend fun <T> safeApiCall(
                     null,
                     response.message()
                 )
+
             } else {
-                ResultWrapper.Success(response)}
+                ResultWrapper.Success(response)
+            }
 
         } catch (throwable: Throwable) {
             when (throwable) {
                 is IOException ->
-                    ResultWrapper.GenericError(
-                        null,
-                        "${throwable.localizedMessage}"
-                    )
-                is HttpException ->
-                    ResultWrapper.NetworkError(
-                        throwable
-                    )
+                    ResultWrapper.GenericError(null, throwable.localizedMessage)
+                is HttpException -> {
+                    ResultWrapper.NetworkError(throwable)
+                }
                 else ->
-                    ResultWrapper.GenericError(
-                        null,
-                        "${throwable.localizedMessage}"
-                    )
+                    ResultWrapper.GenericError(null, throwable.localizedMessage)
             }
         }
     }
@@ -96,5 +91,6 @@ sealed class ResultWrapper<out T> {
     data class Success<out T>(val value: T) : ResultWrapper<T>()
     data class GenericError(val code: Int? = null, val error: String? = null) :
         ResultWrapper<Nothing>()
+
     data class NetworkError(val throwable: HttpException) : ResultWrapper<Nothing>()
 }

@@ -1,9 +1,10 @@
 package com.example.socialnetwork.ui.twitter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -29,15 +30,14 @@ import com.example.socialnetwork.utils.show
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.fragment_instagram.userName
 import kotlinx.android.synthetic.main.fragment_twitter.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.profile_style.*
 import kotlinx.android.synthetic.main.profile_style.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet {
+class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
+    AdapterRecyclerTwitter.OnclickTweet {
 
     private val twitterViewModel: TwitterViewModel by viewModel()
     private lateinit var toolbar: MaterialToolbar
@@ -54,11 +54,11 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        toolbar = (activity as MainActivity).toolbar
-        userNameToolbar = toolbar.userNameToolbar
+        toolbar               = (activity as MainActivity).toolbar
+        userNameToolbar       = toolbar.userNameToolbar
         userScreenNameToolbar = toolbar.screenNameToolbar
         imageNavigationHeader = (activity as MainActivity).imageHeadNavigation
-        textHeaderTitle = (activity as MainActivity).textHeaderTitle
+        textHeaderTitle       = (activity as MainActivity).textHeaderTitle
 
         if (auth.currentUser == null) {
             findNavController().apply {
@@ -107,7 +107,7 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet {
                 swipeRefreshTwitter.isRefreshing = false
             }
             is TwitterViewModel.StateLiveData.RefreshStateProfile -> {
-                userName.text = "@${state.response}"
+                //userName.text = "@${state.response}"
             }
             is TwitterViewModel.StateLiveData.AdapterRecycler -> {
                 adapterRecycler.addData(state.dataRecyclerView)
@@ -185,12 +185,17 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet {
         })
     }
 
-    override fun onClick(mediaUrl: String?, mediaType: String?) {
+    override fun onClickImageTweet(mediaUrl: String?, mediaType: String?) {
 
         val passMediaUrl
                 = TwitterFragmentDirections.actionTwitterFragmentToMediaTwitterFragment()
             .setMediaUrl("$mediaUrl,$mediaType")
         findNavController().navigate(passMediaUrl)
         toolbar.hide()
+    }
+
+    override fun onclickTweet(tweetUrl: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl))
+        startActivity(intent)
     }
 }

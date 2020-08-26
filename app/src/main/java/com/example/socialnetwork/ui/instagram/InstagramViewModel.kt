@@ -8,6 +8,7 @@ import com.example.socialnetwork.data.model.ModelResponse
 import com.example.socialnetwork.data.model.ModelResponseProfileInstagram
 import com.example.socialnetwork.utils.ResultWrapper
 import kotlinx.coroutines.*
+import retrofit2.http.HTTP
 import kotlin.coroutines.CoroutineContext
 
 
@@ -28,6 +29,7 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
         class  RefreshStateUi(val response: ModelResponse) : StateLiveData()
         class  RefreshStateProfile(val response: ModelResponseProfileInstagram) : StateLiveData()
         object PostCall:        StateLiveData()
+        object ErrorResponse:        StateLiveData()
         class AdapterRecycler(val dataRecyclerView: ArrayList<ModelResponse>): InstagramViewModel.StateLiveData()
     }
 
@@ -50,8 +52,14 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
                     uiModelInstagram.value = StateLiveData.RefreshStateUi(result.value)
                     dataRestaurerRecycler.add(result.value)
                 }
-                is ResultWrapper.NetworkError -> { Log.d("Test", result.throwable.message()) }
-                is ResultWrapper.GenericError -> { Log.d("Test", result.error) }
+                is ResultWrapper.NetworkError -> {
+                    uiModelInstagram.value = StateLiveData.ErrorResponse
+                    Log.d("Test", result.throwable.localizedMessage)
+                }
+                is ResultWrapper.GenericError -> {
+                    uiModelInstagram.value = StateLiveData.ErrorResponse
+                    Log.d("Test", result.error)
+                }
             }
             uiModelInstagram.value = StateLiveData.PostCall
         }
@@ -62,13 +70,17 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
         launch {
 
             uiModelInstagram.value = StateLiveData.PreCall
-            when (val result = instagramRespository.getProfileInstagram(code)) {
+            when (val result =
+                instagramRespository.getProfileInstagram(code)) {
+
                 is ResultWrapper.Success      -> {
                     uiModelInstagram.value = StateLiveData.RefreshStateProfile(result.value)
                     mediaCount = result.value.media_count
                 }
-                is ResultWrapper.NetworkError -> { Log.d("Test", result.throwable.message()) }
-                is ResultWrapper.GenericError -> { Log.d("Test", result.error.toString()) }
+                is ResultWrapper.NetworkError ->
+                    Log.d("Test", result.toString() ?: "Error")
+
+                is ResultWrapper.GenericError ->  Log.d("Test", result.error.toString())
             }
             uiModelInstagram.value = StateLiveData.PostCall
         }

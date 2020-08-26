@@ -17,6 +17,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.socialnetwork.R
+import kotlinx.android.synthetic.main.fragment_media_twitter.*
+import kotlinx.android.synthetic.main.profile_style.view.*
+import kotlinx.android.synthetic.main.recycler_style_instagram.view.*
 import kotlinx.android.synthetic.main.recycler_style_twitter.view.*
 import twitter4j.Status
 
@@ -43,7 +46,7 @@ fun View.show() {
     isVisible = true
 }
 
-fun View.gone(){
+fun View.gone() {
     isGone = true
 }
 
@@ -61,7 +64,7 @@ fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager
 
 fun View.userRefreshUi(data: Status) {
     retweetUser.hide()
-    textTweet.text = data.text
+    descriptionImageInstagram.text = data.text
     userTwitter.text = data.user.name
     likesCountTweet.text = data.user.favouritesCount.toString()
     screenNameTwitter.text = "@" + data.user.screenName
@@ -83,7 +86,7 @@ fun View.retweetUserRefreshUi(data: Status) {
 
     retweetUser.text = data.user.name + " Retwitted"
     retweetUser.show()
-    textTweet.text = data.retweetedStatus.text
+    descriptionImageInstagram.text = data.retweetedStatus.text
     userTwitter.text = data.retweetedStatus.user.name
     likesCountTweet.text = data.retweetedStatus.user.favouritesCount.toString()
     screenNameTwitter.text = "@" + data.retweetedStatus.user.screenName
@@ -104,21 +107,50 @@ fun View.retweetUserRefreshUi(data: Status) {
 
 fun View.loadImageTweet(mediaType: String?, mediaUrl: String?) {
 
-    Glide.with(this.context)
-        .apply {
-            if (mediaType == "animate_gif")
-                this.asGif()
-        }
-        .load(mediaUrl)
-        .centerCrop()
-        .into(imageTweet)
-    cardImageTweet.show()
-
-    when(mediaType){
+    if (!mediaUrl.isNullOrBlank()) {
+        Glide.with(this.context)
+            .apply {
+                if (mediaType == "animate_gif")
+                    this.asGif()
+            }
+            .load(mediaUrl)
+            .centerCrop()
+            .into(imageTweet)
+        cardImageTweet.show()
+    }
+    when (mediaType) {
         "video" -> iconPlayVideo.show()
         null -> cardImageTweet.hide()
-        else -> { iconPlayVideo.hide()
-        }
+        else -> iconPlayVideo.hide()
+
+    }
+}
+
+fun View.loadImageInstagram(mediaUrl: String) {
+
+    /*
+    if (mediaUrl.contains("video")) {
+        //imageInstagram.gone()
+        //videoViewIg.setVideoPath(mediaUrl)
+        //videoViewIg.start()
+        //videoViewIg.show()
+        //videoViewIg.pause()
+        imageInstagram.hide()
+    } else {*/
+    //videoViewIg.gone()
+
+
+    if (!mediaUrl.isNullOrBlank()) {
+
+        Glide.with(this.context)
+            .load(mediaUrl)
+            .into(imageInstagram)
+
+        Glide.with(this.context)
+            .load(mediaUrl)
+            .placeholder(R.drawable.ic_profile_default)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
+            .into(profilePhotoInstagram)
     }
 }
 

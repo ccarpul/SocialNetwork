@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom" />
     <item android:id="@+id/instagramFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_instagram_logo_svgrepo_com"
+        android:icon="@drawable/ic_instagram_black"
         android:title="@string/instagram"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/twitterFragment"

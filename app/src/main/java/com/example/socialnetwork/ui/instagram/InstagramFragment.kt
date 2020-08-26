@@ -2,39 +2,51 @@ package com.example.socialnetwork.ui.instagram
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.*
-import com.example.socialnetwork.adapter.AdapterRecyclerView
+import com.example.socialnetwork.adapter.AdapterRecyclerInstagram
 import com.example.socialnetwork.utils.*
-import com.facebook.AccessToken
 import com.facebook.Profile
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_instagram.*
+import kotlinx.android.synthetic.main.navigation_header.*
+import kotlinx.android.synthetic.main.profile_style.*
+import kotlinx.android.synthetic.main.profile_style.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class InstagramFragment : Fragment() {
 
     private val instagramViewModel: InstagramViewModel by viewModel()
 
-    private lateinit var toolBar: MaterialToolbar
-    private var accessToken: AccessToken? = null
-    private var profile: Profile? = null
-    private var isLoggedIn = false
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var userNameToolbar: TextView
+    private lateinit var userScreenNameToolbar: TextView
+    private lateinit var imageNavigationHeader: AppCompatImageView
+    private lateinit var textHeaderTitle: TextView
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var adapterRecycler: AdapterRecyclerView = AdapterRecyclerView(arrayListOf())
+    private var adapterRecycler: AdapterRecyclerInstagram = AdapterRecyclerInstagram(arrayListOf())
     var code = ""
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        toolbar               = (activity as MainActivity).toolbar
+        userNameToolbar       = toolbar.userNameToolbar
+        userScreenNameToolbar = toolbar.screenNameToolbar
+        imageNavigationHeader = (activity as MainActivity).imageHeadNavigation
+        textHeaderTitle       = (activity as MainActivity).textHeaderTitle
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         code = sharedPref.getString("accessTokenInstagram","") ?: ""
@@ -46,9 +58,7 @@ class InstagramFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+        savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_instagram, container, false)
     }
 
@@ -56,9 +66,6 @@ class InstagramFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         onScrollTopNews()
-        toolBar = (activity as MainActivity).toolbar
-        toolBar.show()
-        toolBar.title = getString(R.string.TitleSocialNetwork) + profile?.firstName
     }
 
     private fun setupRecyclerView() {
@@ -68,7 +75,6 @@ class InstagramFragment : Fragment() {
             adapter = adapterRecycler
         }
     }
-
     private fun onScrollTopNews() {
         instagramRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -98,18 +104,46 @@ class InstagramFragment : Fragment() {
             }
             is InstagramViewModel.StateLiveData.RefreshStateUi -> {
                 adapterRecycler.addData(state.response)
-
             }
             is InstagramViewModel.StateLiveData.PostCall -> {
                 progressBarIg.hide()
             }
             is InstagramViewModel.StateLiveData.RefreshStateProfile -> {
-                //userName.text = "@${state.response.username}"
+
+                setupToolbar(state.response.username)
+                setupNavigationView(state.response.username)
             }
             is InstagramViewModel.StateLiveData.AdapterRecycler -> {
                 for (data in state.dataRecyclerView)
                     adapterRecycler.addData(data)
             }
+            is InstagramViewModel.StateLiveData.ErrorResponse -> {
+                makeToast(requireContext(), "Conection Error, please try again")
+                findNavController().navigate(R.id.loginInstagramFragment)
+            }
+
         }
+    }
+
+    private fun setupToolbar(userName:  String){
+
+        (activity as MainActivity).toolbar.show()
+
+        (activity as MainActivity).imageProviderToolbar.apply {
+            setImageResource(R.drawable.ic_instagram_white)
+            show()
+        }
+
+        userNameToolbar.text = "@$userName"
+        userScreenNameToolbar.gone()
+        toolbar.navigationIcon =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_hamburger_24)
+
+        toolbar.show()
+    }
+
+    private fun setupNavigationView(userName: String) {
+        textHeaderTitle.text = " @$userName"
+        imageNavigationHeader.setImageResource(R.mipmap.ic_launcher)
     }
 }

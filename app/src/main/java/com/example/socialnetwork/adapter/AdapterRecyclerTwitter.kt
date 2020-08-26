@@ -1,20 +1,23 @@
 package com.example.socialnetwork.adapter
 
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.R
 import com.example.socialnetwork.utils.*
 import kotlinx.android.synthetic.main.recycler_style_twitter.view.*
-import twitter4j.MediaEntity
 import twitter4j.Status
 
 
 class AdapterRecyclerTwitter(
 
     private var listUserTweet: MutableList<Status>,
-    private val listener: OnClickImageTweet
+    private val listenerImageTweet: OnClickImageTweet
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -48,16 +51,22 @@ class AdapterRecyclerTwitter(
     override fun getItemCount(): Int = listUserTweet.size
 
     interface OnClickImageTweet {
-        fun onClick(mediaUrl: String?, mediaType: String?)
+        fun onClickImageTweet(mediaUrl: String?, mediaType: String?)
+    }
+
+    interface OnclickTweet {
+        fun onclickTweet(tweetUrl: String)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
         if (holder is AdapterViewHolder) {
+
             pos = position
 
             val mediaEntity = mediaEntity(listUserTweet[position])
             val mediaVideo =
-                if (mediaEntity?.type == "video") mediaEntity?.getMediaUrl() else null
+                if (mediaEntity?.type == "video") mediaEntity.getMediaUrl() else null
 
             holder.bind(
                 listUserTweet[position], mediaEntity?.mediaURLHttps, mediaEntity?.type,
@@ -68,20 +77,34 @@ class AdapterRecyclerTwitter(
 
     inner class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
-        var passMediaUrl: String? = ""
+        var passMediaUrl:  String? = ""
         var passMediaType: String? = ""
+        var passTweetUrl:  String  = ""
+
         fun bind(data: Status, mediaUrl: String?, mediaType: String?, mediaUrlVideo: String?) {
 
-            passMediaUrl = mediaUrlVideo ?: mediaUrl
+            passMediaUrl  = mediaUrlVideo ?: mediaUrl
             passMediaType = mediaType
-            itemView.imageTweet.setOnClickListener(this)
-            if (data.retweetedStatus == null) {
-                itemView.userRefreshUi(data)
-            } else itemView.retweetUserRefreshUi(data)
+            passTweetUrl  = "https://twitter.com/${data.user.screenName}/status/${data.id}"
+
+            if (data.retweetedStatus == null) itemView.userRefreshUi(data)
+            else itemView.retweetUserRefreshUi(data)
 
             itemView.loadImageTweet(mediaType, mediaUrl)
-
+            itemView.imageTweet.setOnClickListener(this)
+            itemView.setOnClickListener { goToTweetUrl(passTweetUrl, it) }
         }
-        override fun onClick(v: View?) { listener.onClick(passMediaUrl, passMediaType) }
+
+        override fun onClick(v: View?) {
+            listenerImageTweet.onClickImageTweet(passMediaUrl, passMediaType)
+        }
+    }
+
+    fun goToTweetUrl(passTweetUrl: String, view: View) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(passTweetUrl))
+            startActivity(view.context, intent, null)
+
+        } catch (e: Exception) { Log.i("Carpul", "bind: $e") }
     }
 }

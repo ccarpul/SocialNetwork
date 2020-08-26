@@ -4,8 +4,8 @@ object Constants {
 
     //INSTAGRAM
     const val BASE_URL_INSTAGRAM = "https://graph.instagram.com/"
-    const val ENDPOINT_MEDIA     = "me/media?fields=id,caption,username,media_url&limit=4"
-    const val ENDPOINT_ME        = "me?fields=username,media_count&access_token="
+    const val ENDPOINT_MEDIA     = "me/media?fields=id,caption,username,media_url&limit=10"
+    const val ENDPOINT_ME        = "me?fields=username,media_count"
 
     //ACCESS TOKEN INSTAGRAM
     const val URL_AUTH_INSTAGRAM        = "https://api.instagram.com/oauth/authorize?"

@@ -1,5 +1,6 @@
 package com.example.socialnetwork.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.R
 import com.example.socialnetwork.data.model.Data
 import com.example.socialnetwork.data.model.ModelResponse
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.recycler_style.view.*
+import com.example.socialnetwork.utils.loadImageInstagram
+import kotlinx.android.synthetic.main.recycler_style_instagram.view.*
 
 
-class AdapterRecyclerView(
+class AdapterRecyclerInstagram(
     private var list: ArrayList<Data>
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -20,7 +21,7 @@ class AdapterRecyclerView(
     private var pos = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_style, parent, false)
+            .inflate(R.layout.recycler_style_instagram, parent, false)
         return AdapterViewHolder(view)
     }
 
@@ -43,6 +44,7 @@ class AdapterRecyclerView(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AdapterViewHolder) {
             pos = position
+
             holder.bind(list[position])
         }
     }
@@ -50,16 +52,11 @@ class AdapterRecyclerView(
     inner class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: Data) {
 
-            itemView.apply {
-                textTweet.text = data.caption
 
-                if (!data.media_url.isNullOrBlank()) {
-                    Picasso.with(itemView.context).load(data.media_url)
-                        .placeholder(R.mipmap.ic_launcher_foreground)
-                        .resize(360, 280)
-                        .centerCrop()
-                        .into(profilePhotoTwitter)
-                } else profilePhotoTwitter.setImageDrawable(resources.getDrawable(R.mipmap.ic_launcher))
+            itemView.apply {
+                userInstagram.text = data.username
+                textImageInstagram.text = "${data.username} ${data.caption}"
+                loadImageInstagram(data.media_url)
             }
         }
     }
