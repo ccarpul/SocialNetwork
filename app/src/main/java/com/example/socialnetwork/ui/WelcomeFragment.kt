@@ -13,6 +13,7 @@ import com.example.socialnetwork.R
 import com.example.socialnetwork.utils.Constants
 import com.example.socialnetwork.utils.hide
 import com.example.socialnetwork.utils.makeToast
+import com.example.socialnetwork.utils.show
 import com.google.android.gms.tasks.Task
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.AuthResult
@@ -42,7 +43,6 @@ class WelcomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_welcome, container, false)
 
     }
@@ -65,6 +65,7 @@ class WelcomeFragment : Fragment() {
 
         gotoTwitter.setOnClickListener {
 
+            progressBarWelcome.show()
             if (FirebaseAuth.getInstance().currentUser == null) {
                 setLoginByTwitter().addOnCompleteListener {
 
@@ -74,11 +75,13 @@ class WelcomeFragment : Fragment() {
                         putString("userTokenSecret", oAuthCredential.secret)
                         commit()
                     }
+                    progressBarWelcome.hide()
                     findNavController().navigate(R.id.twitterFragment)
                 }.addOnFailureListener {
+                    progressBarWelcome.hide()
                     makeToast(
                         requireContext(),
-                        it.localizedMessage ?: "Try again"
+                        it.localizedMessage ?: getString(R.string.try_again)
                     )
                 }
             } else {
