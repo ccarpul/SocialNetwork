@@ -10,7 +10,7 @@ import okhttp3.RequestBody
 
 class AccessTokenRepository(private val instagramAccessTokenClient: AccessTokenClient) {
 
-    val dispatcher = Dispatchers.IO
+    private val dispatcher = Dispatchers.IO
 
     suspend fun getAccessToken(clientId: RequestBody, clientSecret: RequestBody,
                                redirectUri: RequestBody, grantType: RequestBody, code: RequestBody

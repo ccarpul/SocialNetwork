@@ -1,5 +1,5 @@
 package com.example.socialnetwork.ui.accesstoken
 
 interface AccessTokenListener {
-    fun onCodeReceived(auth_code: String)
+    fun onCodeReceived(auth_code: String?)
 }

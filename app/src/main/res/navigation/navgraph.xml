@@ -34,7 +34,7 @@
         android:id="@+id/loginInstagramFragment"
         android:name="com.example.socialnetwork.ui.accesstoken.AccessTokenFragment"
         android:label="login_instagram"
-        tools:layout="@layout/fragment_login_instagram" >
+        tools:layout="@layout/fragment_accesstoken_ig" >
         <argument
             android:name="urlAuthInstagram"
             app:argType="string" />

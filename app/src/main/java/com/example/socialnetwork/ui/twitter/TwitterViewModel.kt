@@ -19,7 +19,6 @@ class TwitterViewModel(private val twitterRespository: TwitterRepository) : View
     CoroutineScope {
 
     private var job: Job = Job()
-
     var page = 1
     var pos = 0
 
