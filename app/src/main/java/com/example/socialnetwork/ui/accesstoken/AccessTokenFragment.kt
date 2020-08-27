@@ -7,17 +7,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.socialnetwork.*
-import com.example.socialnetwork.utils.Constants
-import com.example.socialnetwork.utils.MyWebViewClient
-import com.example.socialnetwork.utils.hide
+import com.example.socialnetwork.utils.*
 import com.facebook.CallbackManager
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login_instagram.*
+import kotlinx.android.synthetic.main.navigation_header.*
+import kotlinx.android.synthetic.main.profile_style.*
+import kotlinx.android.synthetic.main.profile_style.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class AccessTokenFragment : Fragment(), AccessTokenListener {
@@ -26,14 +29,17 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
     private val callbackManager = CallbackManager.Factory.create()
     private lateinit var listener: AccessTokenListener
     private lateinit var sharedPref: SharedPreferences
-
-    private lateinit var toolBar: MaterialToolbar
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var userNameToolbar: TextView
+    private lateinit var imageProviderToolbar: AppCompatImageView
+    private lateinit var imageNavigationHeader: AppCompatImageView
+    private lateinit var textHeaderTitle: TextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
 
-        accessTokenViewModel.modelAccessToken.observe(this, Observer (::upDateUi))
+        accessTokenViewModel.modelAccessToken.observe(this, Observer(::upDateUi))
     }
 
     override fun onCreateView(
@@ -46,32 +52,17 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolBar = (activity as MainActivity).toolbar
-        toolBar.hide()
-        toolBar.title = getString(R.string.welcome)
-
-        /*
-
-          buttonFacebook.setOnClickListener {
-
-              buttonFacebook.setReadPermissions("email")
-              buttonFacebook.fragment = this
-              buttonFacebook.registerCallback(
-                  callbackManager,
-                  object : FacebookCallback<LoginResult> {
-
-                      override fun onSuccess(result: LoginResult) {
-                          findNavController().navigate(R.id.instagramFragment)
-                      }
-
-                      override fun onCancel() {}
-
-                      override fun onError(error: FacebookException?) {
-
-                      }
-                  })
-          }
-  */
+        toolbar = (activity as MainActivity).toolbar
+        toolbar.show()
+        userNameToolbar = toolbar.userNameToolbar
+        toolbar.screenNameToolbar.gone()
+        userNameToolbar.text = getString(R.string.welcome_to_instagram)
+        imageProviderToolbar = toolbar.imageProviderToolbar
+        imageProviderToolbar.setImageDrawable(resources.getDrawable(R.drawable.ic_instagram_white))
+        imageNavigationHeader = (activity as MainActivity).imageHeadNavigation
+        imageNavigationHeader.setImageResource(R.mipmap.ic_launcher)
+        textHeaderTitle = (activity as MainActivity).textHeaderTitle
+        textHeaderTitle.text = getString(R.string.app_name)
 
         listener = this
         webView.apply {
@@ -91,11 +82,12 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
 
     override fun onCodeReceived(auth_code: String) {
 
-       accessTokenViewModel.getAccessToken(auth_code)
+        if (auth_code != "denied") accessTokenViewModel.getAccessToken(auth_code)
+        else findNavController().navigate(R.id.welcomeFragment)
     }
 
     private fun upDateUi(state: AccessTokenViewModel.StateLiveData) {
-        
+
         when (state) {
 
             is AccessTokenViewModel.StateLiveData.PreCall -> {

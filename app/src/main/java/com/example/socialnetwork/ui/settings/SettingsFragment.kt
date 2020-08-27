@@ -3,27 +3,21 @@ package com.example.socialnetwork.ui.settings
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
 import com.example.socialnetwork.utils.hide
-import com.example.socialnetwork.utils.show
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.profile_style.*
-import kotlinx.android.synthetic.main.recycler_style_twitter.*
 
 class SettingsFragment : Fragment() {
 
@@ -51,7 +45,7 @@ class SettingsFragment : Fragment() {
         userNameToolbar = (activity as MainActivity).userNameToolbar
         userNameToolbar.text = getString(R.string.titleSetting)
 
-        logoutButtonFacebook.setOnClickListener {
+        logoutInstagram.setOnClickListener {
             with(sharedPref.edit()){
                 putString("accessTokenInstagram", "")
                 commit()
@@ -63,7 +57,7 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        logoutButtonTwitter.setOnClickListener {
+        logoutTwitter.setOnClickListener {
             Firebase.auth.signOut()
 
             with(sharedPref.edit()){

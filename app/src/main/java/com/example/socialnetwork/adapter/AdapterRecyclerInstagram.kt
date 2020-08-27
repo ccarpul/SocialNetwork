@@ -49,7 +49,7 @@ class AdapterRecyclerInstagram(
         }
     }
 
-    inner class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: Data) {
 
 

@@ -55,7 +55,7 @@ class WelcomeFragment : Fragment() {
         toolBar = (activity as MainActivity).toolbar
         toolBar.hide()
 
-        textViewInstagram.setOnClickListener {
+        gotoInstagram.setOnClickListener {
 
             if (accessTokenInstagram == "") {
                 val passUrl
@@ -67,7 +67,7 @@ class WelcomeFragment : Fragment() {
             }
         }
 
-        textViewTwitter.setOnClickListener {
+        gotoTwitter.setOnClickListener {
 
             if (FirebaseAuth.getInstance().currentUser == null) {
                 setLoginByTwitter().addOnCompleteListener {
