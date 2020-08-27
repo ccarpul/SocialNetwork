@@ -4,6 +4,7 @@
     android:layout_height="160dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorPrimaryDark"
+    android:id="@+id/headerNavigationView"
     android:orientation="horizontal">
 
     <androidx.appcompat.widget.AppCompatImageView

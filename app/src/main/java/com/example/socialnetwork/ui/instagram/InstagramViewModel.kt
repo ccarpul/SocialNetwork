@@ -41,7 +41,7 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
             return uiModelInstagram
         }
 
-    fun getData(code: String) {
+    fun getData(code: String?) {
 
         launch {
 
@@ -65,7 +65,7 @@ class InstagramViewModel(private val instagramRespository: InstagramRespository)
         }
     }
 
-    fun getProfile(code: String) {
+    fun getProfile(code: String?) {
 
         launch {
 

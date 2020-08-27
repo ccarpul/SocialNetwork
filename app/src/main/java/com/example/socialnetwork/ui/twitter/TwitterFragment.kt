@@ -23,10 +23,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
 import com.example.socialnetwork.adapter.AdapterRecyclerTwitter
-import com.example.socialnetwork.utils.getClearImageUrl
-import com.example.socialnetwork.utils.hide
-import com.example.socialnetwork.utils.isLastArticleDisplayed
-import com.example.socialnetwork.utils.show
+import com.example.socialnetwork.utils.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,25 +37,16 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
     AdapterRecyclerTwitter.OnclickTweet {
 
     private val twitterViewModel: TwitterViewModel by viewModel()
-    private lateinit var toolbar: MaterialToolbar
-    private lateinit var userNameToolbar: TextView
-    private lateinit var userScreenNameToolbar: TextView
-    private lateinit var imageNavigationHeader: AppCompatImageView
-    private lateinit var textHeaderTitle: TextView
+
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var adapterRecycler: AdapterRecyclerTwitter =
         AdapterRecyclerTwitter(arrayListOf(), this)
-    private var userToken: String? = ""
-    private var userTokenSecret: String? = ""
+    private var userToken: String? = null
+    private var userTokenSecret: String? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        toolbar               = (activity as MainActivity).toolbar
-        userNameToolbar       = toolbar.userNameToolbar
-        userScreenNameToolbar = toolbar.screenNameToolbar
-        imageNavigationHeader = (activity as MainActivity).imageHeadNavigation
-        textHeaderTitle       = (activity as MainActivity).textHeaderTitle
 
         if (auth.currentUser == null) {
             findNavController().apply {
@@ -71,8 +59,7 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_twitter, container, false)
     }
 
@@ -106,9 +93,6 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
                 progressBarTw.hide()
                 swipeRefreshTwitter.isRefreshing = false
             }
-            is TwitterViewModel.StateLiveData.RefreshStateProfile -> {
-                //userName.text = "@${state.response}"
-            }
             is TwitterViewModel.StateLiveData.AdapterRecycler -> {
                 adapterRecycler.addData(state.dataRecyclerView)
             }
@@ -125,49 +109,27 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
 
     private fun getTokens() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        userToken = sharedPref.getString("userToken", "")
-        userTokenSecret = sharedPref.getString("userTokenSecret", "")
+        userToken = sharedPref.getString("userToken", null)
+        userTokenSecret = sharedPref.getString("userTokenSecret", null)
 
     }
 
     private fun setupToolbar() {
-        (activity as MainActivity).imageProviderToolbar.apply {
-            setImageResource(R.drawable.ic_twitter_white)
-            show()
-        }
-        userNameToolbar.text = auth.currentUser?.displayName
-        if (auth.currentUser?.email == "") userScreenNameToolbar.hide()
-        else userScreenNameToolbar.apply {
-            text = auth.currentUser?.email
-            show()
-        }
 
-        if (auth.currentUser?.photoUrl != null) {
-            Glide.with(toolbar.context).asBitmap()
-                .load(auth.currentUser?.photoUrl.toString().getClearImageUrl())
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
-                .into(object : SimpleTarget<Bitmap>(140, 140) {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: Transition<in Bitmap>?
-                    ) {
-                        toolbar.navigationIcon = BitmapDrawable(resources, resource)
-                    }
-                })
-        } else toolbar.navigationIcon =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_hamburger_24)
-
-        toolbar.show()
+        (activity as MainActivity).toolbar.setupToolbar(
+            imageProvider=R.drawable.ic_twitter_white,
+            textUserName = auth.currentUser?.displayName,
+            textScreenName = auth.currentUser?.email,
+            imageNavigationIcon = auth.currentUser?.photoUrl.toString()
+        )
     }
 
     private fun setupNavigationView() {
 
-        textHeaderTitle.text = auth.currentUser?.displayName ?: getString(R.string.app_name)
-        Glide.with(requireActivity())
-            .load(auth.currentUser?.photoUrl.toString().getClearImageUrl())
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
-            .placeholder(R.mipmap.ic_launcher_foreground)
-            .into(imageNavigationHeader)
+        (activity as MainActivity).headerNavigationView.setupHeaderNav(
+            textHeader = auth.currentUser?.displayName ?: getString(R.string.app_name),
+            imageHeaderUri = auth.currentUser?.photoUrl.toString().getClearImageUrl()
+        )
     }
 
     private fun onScrollTwitter() {
@@ -191,7 +153,8 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
                 = TwitterFragmentDirections.actionTwitterFragmentToMediaTwitterFragment()
             .setMediaUrl("$mediaUrl,$mediaType")
         findNavController().navigate(passMediaUrl)
-        toolbar.hide()
+
+        (activity as MainActivity).toolbar.hide()
     }
 
     override fun onclickTweet(tweetUrl: String) {

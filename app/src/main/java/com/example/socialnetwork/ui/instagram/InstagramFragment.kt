@@ -30,34 +30,23 @@ class InstagramFragment : Fragment() {
 
     private val instagramViewModel: InstagramViewModel by viewModel()
 
-    private lateinit var toolbar: MaterialToolbar
-    private lateinit var userNameToolbar: TextView
-    private lateinit var userScreenNameToolbar: TextView
-    private lateinit var imageNavigationHeader: AppCompatImageView
-    private lateinit var textHeaderTitle: TextView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var adapterRecycler: AdapterRecyclerInstagram = AdapterRecyclerInstagram(arrayListOf())
-    var code = ""
+    private var code: String? = null
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        toolbar               = (activity as MainActivity).toolbar
-        userNameToolbar       = toolbar.userNameToolbar
-        userScreenNameToolbar = toolbar.screenNameToolbar
-        imageNavigationHeader = (activity as MainActivity).imageHeadNavigation
-        textHeaderTitle       = (activity as MainActivity).textHeaderTitle
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        code = sharedPref.getString("accessTokenInstagram","") ?: ""
+        code = sharedPref.getString("accessTokenInstagram", "")
 
-        if(code == "") findNavController().navigate(R.id.welcomeFragment)
+        if (code == null) findNavController().navigate(R.id.welcomeFragment)
 
         instagramViewModel.modelInstagram.observe(this, Observer(::upDateUi))
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_instagram, container, false)
     }
@@ -69,25 +58,28 @@ class InstagramFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
+
         linearLayoutManager = LinearLayoutManager(requireContext())
+
         instagramRecyclerView.apply {
             layoutManager = linearLayoutManager
             adapter = adapterRecycler
         }
     }
+
     private fun onScrollTopNews() {
+
         instagramRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+
                 instagramViewModel.pos = adapterRecycler.getPosition()
+
                 if (instagramRecyclerView.isLastArticleDisplayed(linearLayoutManager)) {
                     if (instagramViewModel.mediaCount - instagramViewModel.pos >= 4)
                         instagramViewModel.getData(code)
-                    else makeToast(
-                        requireContext(),
-                        getString(R.string.endList)
-                    )
+                    else makeToast(requireContext(), getString(R.string.endList))
                 }
             }
         })
@@ -118,32 +110,24 @@ class InstagramFragment : Fragment() {
                     adapterRecycler.addData(data)
             }
             is InstagramViewModel.StateLiveData.ErrorResponse -> {
-                makeToast(requireContext(), "Conection Error, please try again")
+                makeToast(requireContext(), getString(R.string.error_conection_Ig))
                 findNavController().navigate(R.id.loginInstagramFragment)
             }
-
         }
     }
 
-    private fun setupToolbar(userName:  String){
-
-        (activity as MainActivity).toolbar.show()
-
-        (activity as MainActivity).imageProviderToolbar.apply {
-            setImageResource(R.drawable.ic_instagram_white)
-            show()
-        }
-
-        userNameToolbar.text = "@$userName"
-        userScreenNameToolbar.gone()
-        toolbar.navigationIcon =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_hamburger_24)
-
-        toolbar.show()
+    private fun setupToolbar(userName: String) {
+        (activity as MainActivity).toolbar.setupToolbar(
+            imageProvider = R.drawable.ic_instagram_white,
+            textUserName = "@ $userName",
+            screenVisible = View.GONE
+        )
     }
 
     private fun setupNavigationView(userName: String) {
-        textHeaderTitle.text = " @$userName"
-        imageNavigationHeader.setImageResource(R.mipmap.ic_launcher)
+        (activity as MainActivity).headerNavigationView.setupHeaderNav(
+            textHeader = " @$userName",
+            imageHeaderDrawable = R.mipmap.ic_launcher
+        )
     }
 }

@@ -30,10 +30,9 @@ class TwitterViewModel(private val twitterRespository: TwitterRepository) : View
 
     sealed class StateLiveData {
         object InitialStateUi : StateLiveData()
-        object PreCall : StateLiveData()
-        class RefreshStateUi(val response: List<Status>) : StateLiveData()
-        class RefreshStateProfile(val response: ModelResponseTwitter) : StateLiveData()
-        object PostCall : StateLiveData()
+        object PreCall        : StateLiveData()
+        object PostCall       : StateLiveData()
+        class RefreshStateUi(val response: List<Status>)         : StateLiveData()
         class AdapterRecycler(val dataRecyclerView: List<Status>): StateLiveData()
     }
 

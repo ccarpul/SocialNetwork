@@ -8,7 +8,6 @@ import com.example.socialnetwork.ui.accesstoken.AccessTokenListener
 class MyWebViewClient(private val listener: AccessTokenListener) : WebViewClient() {
 
     override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-        Log.i("Carpul", "shouldOverrideUrlLoading: $url")
         if (url?.startsWith(Constants.URI_REDIRECT)!!) {
             if (url.contains("code=")) {
                 listener.onCodeReceived(getCodeFromUrl(url))

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login_instagram.*
 import kotlinx.android.synthetic.main.navigation_header.*
+import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.profile_style.*
 import kotlinx.android.synthetic.main.profile_style.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -29,11 +31,7 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
     private val callbackManager = CallbackManager.Factory.create()
     private lateinit var listener: AccessTokenListener
     private lateinit var sharedPref: SharedPreferences
-    private lateinit var toolbar: MaterialToolbar
-    private lateinit var userNameToolbar: TextView
-    private lateinit var imageProviderToolbar: AppCompatImageView
-    private lateinit var imageNavigationHeader: AppCompatImageView
-    private lateinit var textHeaderTitle: TextView
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,36 +41,26 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_instagram, container, false)
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar = (activity as MainActivity).toolbar
-        toolbar.show()
-        userNameToolbar = toolbar.userNameToolbar
-        toolbar.screenNameToolbar.gone()
-        userNameToolbar.text = getString(R.string.welcome_to_instagram)
-        imageProviderToolbar = toolbar.imageProviderToolbar
-        imageProviderToolbar.setImageDrawable(resources.getDrawable(R.drawable.ic_instagram_white))
-        imageNavigationHeader = (activity as MainActivity).imageHeadNavigation
-        imageNavigationHeader.setImageResource(R.mipmap.ic_launcher)
-        textHeaderTitle = (activity as MainActivity).textHeaderTitle
-        textHeaderTitle.text = getString(R.string.app_name)
-
+        setupToolbar()
+        setupHeaderNavigation()
         listener = this
-        webView.apply {
+        setupWebView()
+    }
 
+    private fun setupWebView() {
+        webView.apply {
             webViewClient = MyWebViewClient(listener)
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             loadUrl(Constants.URL_INSTAGRAM_AUTH)
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -106,5 +94,18 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
                 findNavController().navigate(R.id.instagramFragment)
             }
         }
+    }
+    private fun setupToolbar() {
+        (activity as MainActivity).toolbar.setupToolbar(
+            visible = View.VISIBLE,
+            textUserName = getString(R.string.welcome_to_instagram),
+            screenVisible = View.GONE,
+            imageProvider = R.drawable.ic_instagram_white)
+    }
+
+    private fun setupHeaderNavigation(){
+        (activity as MainActivity).headerNavigationView.setupHeaderNav(
+            textHeader = getString(R.string.app_name),
+            imageHeaderDrawable = R.mipmap.ic_launcher)
     }
 }

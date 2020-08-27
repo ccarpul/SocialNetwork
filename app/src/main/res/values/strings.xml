@@ -41,5 +41,6 @@
     <string name="endList">End List</string>
     <string name="go_to_twitter">Go to Twitter</string>
     <string name="go_to_instagram">Go to Instagram</string>
+    <string name="error_conection_Ig">Conection Error, please try again</string>
 
 </resources>

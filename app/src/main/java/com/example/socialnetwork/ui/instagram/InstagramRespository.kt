@@ -11,14 +11,14 @@ import kotlinx.coroutines.withContext
 class InstagramRespository(private val instagramApiClient: InstagramApiClient) {
     val dispatcher = Dispatchers.IO
 
-    suspend fun getDataInstagram(after: String, code: String):
+    suspend fun getDataInstagram(after: String, code: String?):
             ResultWrapper<ModelResponse> =
             withContext(Dispatchers.IO) {
                 safeApiCall(dispatcher) {
                     instagramApiClient.getMedia(after, code)
                 }
             }
-    suspend fun getProfileInstagram(code: String):
+    suspend fun getProfileInstagram(code: String?):
             ResultWrapper<ModelResponseProfileInstagram> =
         withContext(Dispatchers.IO) {
             safeApiCall(dispatcher) {

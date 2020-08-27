@@ -1,23 +1,29 @@
 package com.example.socialnetwork.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.Log
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
-import androidx.core.view.setPadding
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.socialnetwork.R
-import kotlinx.android.synthetic.main.fragment_media_twitter.*
+import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.profile_style.view.*
 import kotlinx.android.synthetic.main.recycler_style_instagram.view.*
 import kotlinx.android.synthetic.main.recycler_style_twitter.view.*
@@ -62,7 +68,7 @@ fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager
     return false
 }
 
-fun View.userRefreshUi(data: Status) {
+fun View.userRefreshUiTwitter(data: Status) {
     retweetUser.hide()
     descriptionImageInstagram.text = data.text
     userTwitter.text = data.user.name
@@ -82,7 +88,7 @@ fun View.userRefreshUi(data: Status) {
     } else profilePhotoTwitter.setImageDrawable(resources.getDrawable(R.drawable.ic_profile_default))
 }
 
-fun View.retweetUserRefreshUi(data: Status) {
+fun View.retweetUserRefreshUiTwitter(data: Status) {
 
     retweetUser.text = data.user.name + " Retwitted"
     retweetUser.show()
@@ -139,7 +145,6 @@ fun View.loadImageInstagram(mediaUrl: String) {
     } else {*/
     //videoViewIg.gone()
 
-
     if (!mediaUrl.isNullOrBlank()) {
 
         Glide.with(this.context)
@@ -152,5 +157,78 @@ fun View.loadImageInstagram(mediaUrl: String) {
             .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
             .into(profilePhotoInstagram)
     }
+}
+
+fun Toolbar.setupToolbar(
+    visible: Int? = View.VISIBLE,
+    userNameVisible: Int = View.VISIBLE,
+    screenVisible: Int = View.VISIBLE,
+    imageProviderVisible: Int = View.VISIBLE,
+    textUserName: String? = null,
+    textScreenName: String? = null,
+    imageProvider: Int? = null,
+    imageNavigationIcon: String? = null
+) {
+
+    if (visible != null) this.visibility = visible
+
+    screenNameToolbar.visibility = screenVisible
+    userNameToolbar.visibility = userNameVisible
+    imageProviderToolbar.visibility = imageProviderVisible
+
+    if (textUserName != null) userNameToolbar.text = textUserName
+
+    if (textScreenName != null || textScreenName != "") screenNameToolbar.text = textScreenName
+    else screenNameToolbar.gone()
+
+    if (imageProvider != null)
+        imageProviderToolbar.setImageDrawable(getDrawable(this.context, imageProvider))
+
+    if (imageNavigationIcon == null)
+        navigationIcon = ContextCompat.getDrawable(this.context, R.drawable.ic_hamburger_24)
+    else {
+        Glide.with(this.context).asBitmap()
+            .load(imageNavigationIcon.getClearImageUrl())
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
+            .into(object : SimpleTarget<Bitmap>(140, 140) {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    navigationIcon = BitmapDrawable(resources, resource)
+                }
+            })
+    }
+}
+
+fun ViewGroup.setupHeaderNav(
+    textHeader: String? = null,
+    imageHeaderDrawable: Int? = null,
+    imageHeaderUrl: String? = null,
+    imageHeaderUri: String? = null
+) {
+
+    when {
+        imageHeaderDrawable != null -> imageHeadNavigation.setImageResource(imageHeaderDrawable)
+        imageHeaderUri != null -> {
+            Glide.with(this.context)
+                .load(imageHeaderUri)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
+                .placeholder(R.mipmap.ic_launcher_foreground)
+                .into(imageHeadNavigation)
+        }
+        imageHeaderUrl != null -> {
+            Glide.with(this.context)
+                .load(imageHeaderUrl)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
+                .placeholder(R.mipmap.ic_launcher_foreground)
+                .into(imageHeadNavigation)
+        }
+        else -> imageHeadNavigation.gone()
+    }
+
+    if (textHeader != null) textHeaderTitle.text = textHeader
+    else this.textHeaderTitle.gone()
+
 }
 

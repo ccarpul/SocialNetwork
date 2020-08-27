@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
 import com.example.socialnetwork.utils.hide
+import com.example.socialnetwork.utils.setupHeaderNav
+import com.example.socialnetwork.utils.setupToolbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,7 +23,6 @@ import kotlinx.android.synthetic.main.profile_style.*
 
 class SettingsFragment : Fragment() {
 
-    private lateinit var userNameToolbar: TextView
     private lateinit var sharedPref: SharedPreferences
 
     override fun onAttach(context: Context) {
@@ -38,16 +39,16 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).toolbar.navigationIcon =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_hamburger_24)
-        (activity as MainActivity).imageProviderToolbar.hide()
-        (activity as MainActivity).screenNameToolbar.hide()
-        userNameToolbar = (activity as MainActivity).userNameToolbar
-        userNameToolbar.text = getString(R.string.titleSetting)
+
+        (activity as MainActivity).toolbar.setupToolbar(
+            imageProviderVisible = View.GONE,
+            screenVisible = View.GONE,
+            textUserName = getString(R.string.titleSetting)
+        )
 
         logoutInstagram.setOnClickListener {
             with(sharedPref.edit()){
-                putString("accessTokenInstagram", "")
+                putString("accessTokenInstagram", null)
                 commit()
             }
 
@@ -61,8 +62,8 @@ class SettingsFragment : Fragment() {
             Firebase.auth.signOut()
 
             with(sharedPref.edit()){
-                putString("userToken", "")
-                putString("userTokenSecret", "")
+                putString("userToken", null)
+                putString("userTokenSecret", null)
                 commit()
             }
             findNavController().apply {

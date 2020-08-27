@@ -28,7 +28,6 @@ class WelcomeFragment : Fragment() {
     private var pendingAuthResult: Task<AuthResult>? = null
     private var userToken: String? = null
     private var userTokenSecret: String? = null
-    private lateinit var toolBar: MaterialToolbar
     private lateinit var sharedPref: SharedPreferences
     private var accessTokenInstagram: String = ""
 
@@ -42,9 +41,7 @@ class WelcomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_welcome, container, false)
 
@@ -52,8 +49,7 @@ class WelcomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolBar = (activity as MainActivity).toolbar
-        toolBar.hide()
+        (activity as MainActivity).toolbar.hide()
 
         gotoInstagram.setOnClickListener {
 

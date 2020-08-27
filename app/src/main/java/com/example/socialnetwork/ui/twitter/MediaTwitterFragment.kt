@@ -1,9 +1,6 @@
 package com.example.socialnetwork.ui.twitter
 
-import android.media.MediaController2
-import android.media.session.MediaController
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.socialnetwork.R
 import com.example.socialnetwork.utils.*
 import kotlinx.android.synthetic.main.fragment_media_twitter.*
-import twitter4j.ControlStreamInfo
-
 
 class MediaTwitterFragment : Fragment() {
 
@@ -33,9 +28,6 @@ class MediaTwitterFragment : Fragment() {
         val media = args?.mediaUrl?.split(",")
         val mediaType = media?.get(1)
         val mediaUrl = media?.get(0)
-
-        Log.i("Carpul", "type: $mediaType")
-        Log.i("Carpul", "url: $mediaUrl")
 
         if (mediaType != "video") {
 

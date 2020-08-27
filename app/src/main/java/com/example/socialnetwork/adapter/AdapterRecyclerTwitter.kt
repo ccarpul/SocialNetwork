@@ -87,8 +87,8 @@ class AdapterRecyclerTwitter(
             passMediaType = mediaType
             passTweetUrl  = "https://twitter.com/${data.user.screenName}/status/${data.id}"
 
-            if (data.retweetedStatus == null) itemView.userRefreshUi(data)
-            else itemView.retweetUserRefreshUi(data)
+            if (data.retweetedStatus == null) itemView.userRefreshUiTwitter(data)
+            else itemView.retweetUserRefreshUiTwitter(data)
 
             itemView.loadImageTweet(mediaType, mediaUrl)
             itemView.imageTweet.setOnClickListener(this)
