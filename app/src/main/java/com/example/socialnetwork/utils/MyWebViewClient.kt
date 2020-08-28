@@ -7,9 +7,6 @@ import com.example.socialnetwork.ui.accesstoken.AccessTokenListener
 
 class MyWebViewClient(private val listener: AccessTokenListener) : WebViewClient() {
 
-    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-        return false
-    }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)

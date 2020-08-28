@@ -14,10 +14,12 @@ import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
 import com.example.socialnetwork.utils.hide
 import com.example.socialnetwork.utils.setupHeaderNav
+import com.example.socialnetwork.utils.setupMenuItem
 import com.example.socialnetwork.utils.setupToolbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.profile_style.*
 
@@ -40,11 +42,18 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).drawer.navDrawer.setupMenuItem(
+            id = R.id.settingsFragment,
+            titleMenu = getString(R.string.settings),
+            isSelected = true)
+
+
         (activity as MainActivity).toolbar.setupToolbar(
             imageProviderVisible = View.GONE,
             screenVisible = View.GONE,
             textUserName = getString(R.string.titleSetting)
         )
+
 
         logoutInstagram.setOnClickListener {
             with(sharedPref.edit()){
@@ -72,5 +81,14 @@ class SettingsFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity).drawer.navDrawer.setupMenuItem(
+            id = R.id.settingsFragment,
+            titleMenu = getString(R.string.settings),
+            isSelected = false)
+    }
+    
 
 }

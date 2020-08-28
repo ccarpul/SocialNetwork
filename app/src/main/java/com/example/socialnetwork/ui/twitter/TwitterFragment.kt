@@ -27,6 +27,7 @@ import com.example.socialnetwork.utils.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_twitter.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.profile_style.*
@@ -126,6 +127,11 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
 
     private fun setupNavigationView() {
 
+        (activity as MainActivity).drawer.navDrawer.setupMenuItem(
+            id = R.id.twitterFragment,
+            titleMenu = getString(R.string.twitter),
+            isSelected = true)
+
         (activity as MainActivity).headerNavigationView.setupHeaderNav(
             textHeader = auth.currentUser?.displayName ?: getString(R.string.app_name),
             imageHeaderUri = auth.currentUser?.photoUrl.toString().getClearImageUrl()
@@ -160,5 +166,15 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
     override fun onclickTweet(tweetUrl: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl))
         startActivity(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        (activity as MainActivity).drawer.navDrawer.setupMenuItem(
+            id = R.id.twitterFragment,
+            titleMenu = getString(R.string.twitter),
+            isSelected = false)
+
     }
 }

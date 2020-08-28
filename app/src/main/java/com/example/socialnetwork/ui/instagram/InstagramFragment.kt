@@ -19,7 +19,9 @@ import com.example.socialnetwork.adapter.AdapterRecyclerInstagram
 import com.example.socialnetwork.utils.*
 import com.facebook.Profile
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_instagram.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.android.synthetic.main.profile_style.*
@@ -37,11 +39,13 @@ class InstagramFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        code = sharedPref.getString("accessTokenInstagram", "")
+        code = sharedPref.getString("accessTokenInstagram", null)
 
-        if (code == null) findNavController().navigate(R.id.welcomeFragment)
+        if (code == null) {
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.loginInstagramFragment)
+        }
 
         instagramViewModel.modelInstagram.observe(this, Observer(::upDateUi))
     }
@@ -128,6 +132,21 @@ class InstagramFragment : Fragment() {
         (activity as MainActivity).headerNavigationView.setupHeaderNav(
             textHeader = " @$userName",
             imageHeaderDrawable = R.mipmap.ic_launcher
+        )
+
+        (activity as MainActivity).drawer.navDrawer.setupMenuItem(
+            id = R.id.instagramFragment,
+            titleMenu = getString(R.string.instagram),
+            isSelected = true
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity).drawer.navDrawer.setupMenuItem(
+            id = R.id.instagramFragment,
+            titleMenu = getString(R.string.instagram),
+            isSelected = false
         )
     }
 }

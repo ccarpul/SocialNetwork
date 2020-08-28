@@ -1,11 +1,15 @@
 package com.example.socialnetwork.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -23,6 +27,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.socialnetwork.R
+import com.google.android.material.color.MaterialColors.getColor
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.profile_style.view.*
 import kotlinx.android.synthetic.main.recycler_style_instagram.view.*
@@ -230,5 +236,23 @@ fun ViewGroup.setupHeaderNav(
     if (textHeader != null) textHeaderTitle.text = textHeader
     else this.textHeaderTitle.gone()
 
+}
+
+
+fun NavigationView.setupMenuItem(
+    id: Int,
+    titleMenu: String,
+    isSelected: Boolean = false
+) {
+
+    val color = this.context.getColor(R.color.colorAccent)
+    menu.findItem(id).apply {
+        isEnabled = !isSelected
+        title = if (isSelected) {
+            val titleMenuSpannable = SpannableString(titleMenu)
+            titleMenuSpannable.setSpan(ForegroundColorSpan(color), 0, titleMenu.length, 0)
+            titleMenuSpannable
+        } else titleMenu
+    }
 }
 
