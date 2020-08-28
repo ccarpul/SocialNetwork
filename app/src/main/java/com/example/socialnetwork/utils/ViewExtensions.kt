@@ -96,7 +96,7 @@ fun View.userRefreshUiTwitter(data: Status) {
 
 fun View.retweetUserRefreshUiTwitter(data: Status) {
 
-    retweetUser.text = data.user.name + " Retwitted"
+    retweetUser.text = data.user.name + context.getString(R.string.retwitted)
     retweetUser.show()
     descriptionImageInstagram.text = data.retweetedStatus.text
     userTwitter.text = data.retweetedStatus.user.name

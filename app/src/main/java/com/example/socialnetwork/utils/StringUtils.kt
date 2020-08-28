@@ -1,7 +1,5 @@
 package com.example.socialnetwork.utils
 
-import twitter4j.MediaEntity
-import twitter4j.Status
 
 fun String.getClearImageUrl(): String{
 

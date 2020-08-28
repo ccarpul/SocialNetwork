@@ -3,6 +3,7 @@ package com.example.socialnetwork.ui
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -59,7 +60,7 @@ class WelcomeFragment : Fragment() {
                     .actionWelcomeFragmentToLoginInstagramFragment(Constants.URL_INSTAGRAM_AUTH)
                 findNavController().navigate(passUrl)
             } else {
-                findNavController().navigate(R.id.instagramFragment)
+                findNavController().navigate(R.id.action_welcomeFragment_to_instagramFragment)
             }
         }
 
@@ -69,21 +70,25 @@ class WelcomeFragment : Fragment() {
             if (FirebaseAuth.getInstance().currentUser == null) {
                 setLoginByTwitter().addOnCompleteListener {
 
-                    val oAuthCredential = it.result?.credential as OAuthCredential
-                    with(sharedPref.edit()) {
-                        putString("userToken", oAuthCredential.accessToken)
-                        putString("userTokenSecret", oAuthCredential.secret)
-                        commit()
+                    try {
+                        val oAuthCredential = it.result?.credential as OAuthCredential
+                        with(sharedPref.edit()) {
+                            putString("userToken", oAuthCredential.accessToken)
+                            putString("userTokenSecret", oAuthCredential.secret)
+                            commit()
+                        }
+                        progressBarWelcome.hide()
+                        findNavController().navigate(R.id.twitterFragment)
+                    }catch (e: Exception){
+                        Log.i("Carpul", "onViewCreated: $e")
                     }
-                    progressBarWelcome.hide()
-                    findNavController().navigate(R.id.twitterFragment)
                 }.addOnFailureListener {
                     progressBarWelcome.hide()
                     makeToast(
                         requireContext(),
                         it.localizedMessage ?: getString(R.string.try_again)
                     )
-                }
+                }.addOnCanceledListener { Log.i("Carpul", "onViewCreated: Cancelado") }
             } else {
                 val passTokens = WelcomeFragmentDirections.actionWelcomeFragmentToTwitterFragment()
                     .setUserToken("$userToken,$userTokenSecret")

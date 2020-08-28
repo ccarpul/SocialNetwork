@@ -33,7 +33,7 @@
     <string name="TitleSocialNetwork">"Socialnetwork of "</string>
     <string name="welcome_to_instagram">Welcome to Instagram</string>
     <string name="logout_twiiter">Logout Twiiter</string>
-    <string name="logout_facebook">Logout Instagram</string>
+    <string name="logout_instagram">Logout Instagram</string>
     <string name="continue_with_twitter">Continue with Twitter</string>
     <string name="loading">Loading</string>
     <string name="carpul_company" translatable="false">Carpul Company</string>
@@ -43,5 +43,6 @@
     <string name="go_to_instagram">Go to Instagram</string>
     <string name="error_conection_Ig">Conection Error, please try again</string>
     <string name="try_again">Try again</string>
+    <string name="retwitted">" retwitted"</string>
 
 </resources>

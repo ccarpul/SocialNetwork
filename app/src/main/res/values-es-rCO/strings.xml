@@ -8,10 +8,13 @@
     <string name="TitleSocialNetwork">Redes Sociales de</string>
     <string name="welcome_to_instagram">Bienvenido a Instagram</string>
     <string name="logout_twiiter">Salir de Twitter</string>
-    <string name="logout_facebook">Salir de Instagram/Facebook</string>
+    <string name="logout_instagram">Salir de Instagram</string>
     <string name="continue_with_twitter">Continuar con Twitter</string>
     <string name="loading">Cargando</string>
     <string name="endList">End List</string>
-    <string name="go_to_twitter">Go to Twitter</string>
-    <string name="try_again">Try again</string>
+    <string name="go_to_twitter">Ir a Twitter</string>
+    <string name="try_again">Intente de Nuevo</string>
+    <string name="go_to_instagram">Ir a Instagram</string>
+    <string name="error_conection_Ig">Error de Conexión Intente de Nuevo</string>
+    <string name="retwitted">retwitteó</string>
 </resources>
