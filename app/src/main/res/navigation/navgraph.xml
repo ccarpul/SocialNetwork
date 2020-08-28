@@ -23,13 +23,20 @@
             android:defaultValue="," />
         <action
             android:id="@+id/action_twitterFragment_to_mediaTwitterFragment"
-            app:destination="@id/mediaTwitterFragment" />
+            app:destination="@id/mediaTwitterFragment"
+            app:enterAnim="@anim/scale_in" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.socialnetwork.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment"
+            app:enterAnim="@anim/enter_from_left"
+            app:popUpTo="@id/navgraph" />
+    </fragment>
     <fragment
         android:id="@+id/loginInstagramFragment"
         android:name="com.example.socialnetwork.ui.accesstoken.AccessTokenFragment"
@@ -40,7 +47,15 @@
             app:argType="string" />
         <action
             android:id="@+id/action_loginInstagramFragment_to_instagramFragment"
-            app:destination="@id/instagramFragment" />
+            app:destination="@id/instagramFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/exit_to_left"
+            app:popUpTo="@id/welcomeFragment" />
+        <action
+            android:id="@+id/action_loginInstagramFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/enter_from_left" />
     </fragment>
     <activity
         android:id="@+id/splash"
@@ -54,10 +69,13 @@
         tools:layout="@layout/fragment_welcome" >
         <action
             android:id="@+id/action_welcomeFragment_to_twitterFragment"
-            app:destination="@id/twitterFragment" />
+            app:destination="@id/twitterFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/exit_to_left" />
         <action
             android:id="@+id/action_welcomeFragment_to_loginInstagramFragment"
-            app:destination="@id/loginInstagramFragment" />
+            app:destination="@id/loginInstagramFragment"
+            app:enterAnim="@anim/slide_out_left" />
 
     </fragment>
     <fragment

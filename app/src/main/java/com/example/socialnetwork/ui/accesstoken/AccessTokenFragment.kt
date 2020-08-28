@@ -55,10 +55,11 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
     override fun onCodeReceived(auth_code: String?) {
         when (auth_code) {
             "started" -> progressBarAccessIg.show()
+            "error" -> Log.i("Carpul", "onCodeReceived: Error")
             "denied" -> {
                 progressBarAccessIg.hide()
                 webView.hide()
-                findNavController().navigate(R.id.welcomeFragment)
+                findNavController().navigate(R.id.action_loginInstagramFragment_to_welcomeFragment)
             }
             null -> progressBarAccessIg.hide()
             else -> {
@@ -84,7 +85,7 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
             is AccessTokenViewModel.StateLiveData.PostCall -> {
 
                 progressBarAccessIg.hide()
-                findNavController().navigate(R.id.instagramFragment)
+                findNavController().navigate(R.id.action_loginInstagramFragment_to_instagramFragment)
             }
         }
     }
@@ -96,9 +97,5 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
             settings.domStorageEnabled = true
             loadUrl(Constants.URL_INSTAGRAM_AUTH)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }

@@ -1,6 +1,8 @@
 package com.example.socialnetwork.utils
 
 import android.graphics.Bitmap
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.example.socialnetwork.ui.accesstoken.AccessTokenListener
@@ -26,6 +28,15 @@ class MyWebViewClient(private val listener: AccessTokenListener) : WebViewClient
             }else null
 
         listener.onCodeReceived(code)
+    }
+
+    override fun onReceivedError(
+        view: WebView?,
+        request: WebResourceRequest?,
+        error: WebResourceError?
+    ) {
+        super.onReceivedError(view, request, error)
+        listener.onCodeReceived("error")
     }
 
     private fun getCodeFromUrl(url: String): String {

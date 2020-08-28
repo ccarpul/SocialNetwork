@@ -7,13 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
-import com.example.socialnetwork.utils.hide
-import com.example.socialnetwork.utils.setupHeaderNav
 import com.example.socialnetwork.utils.setupMenuItem
 import com.example.socialnetwork.utils.setupToolbar
 import com.google.firebase.auth.ktx.auth
@@ -21,7 +17,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_settings.*
-import kotlinx.android.synthetic.main.profile_style.*
 
 class SettingsFragment : Fragment() {
 
@@ -62,8 +57,7 @@ class SettingsFragment : Fragment() {
             }
 
             findNavController().apply {
-                popBackStack()
-                navigate(R.id.welcomeFragment)
+                navigate(R.id.action_settingsFragment_to_welcomeFragment)
             }
         }
 
@@ -76,8 +70,7 @@ class SettingsFragment : Fragment() {
                 commit()
             }
             findNavController().apply {
-                popBackStack()
-                navigate(R.id.welcomeFragment)
+                navigate(R.id.action_settingsFragment_to_welcomeFragment)
             }
         }
     }
