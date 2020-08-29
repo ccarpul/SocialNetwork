@@ -1,22 +1,26 @@
 package com.example.socialnetwork.utils
 
 import android.graphics.Bitmap
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.util.Log
+import android.webkit.*
 import com.example.socialnetwork.ui.accesstoken.AccessTokenListener
 
 class MyWebViewClient(private val listener: AccessTokenListener) : WebViewClient() {
 
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+        view?.loadUrl(request?.url.toString())
+        return true
+    }
 
-    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-        super.onPageStarted(view, url, favicon)
-        listener.onCodeReceived("started")
+    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+
+        view?.loadUrl(url)
+        return true
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
+
         val code: String? =
             if (url?.startsWith(Constants.URI_REDIRECT)!!) {
                 when {
@@ -30,14 +34,6 @@ class MyWebViewClient(private val listener: AccessTokenListener) : WebViewClient
         listener.onCodeReceived(code)
     }
 
-    override fun onReceivedError(
-        view: WebView?,
-        request: WebResourceRequest?,
-        error: WebResourceError?
-    ) {
-        super.onReceivedError(view, request, error)
-        listener.onCodeReceived("error")
-    }
 
     private fun getCodeFromUrl(url: String): String {
         val index = url.indexOf("code=")

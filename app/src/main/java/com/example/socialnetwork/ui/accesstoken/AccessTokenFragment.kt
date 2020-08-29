@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -53,18 +54,16 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
     }
 
     override fun onCodeReceived(auth_code: String?) {
+        
+        Log.i("Carpul", "onCodeReceived: $auth_code")
         when (auth_code) {
-            "started" -> progressBarAccessIg.show()
-            "error" -> Log.i("Carpul", "onCodeReceived: Error")
+            "error" -> Log.i("Carpul", "onCodeReceived: $auth_code")
             "denied" -> {
-                progressBarAccessIg.hide()
                 webView.hide()
                 findNavController().navigate(R.id.action_loginInstagramFragment_to_welcomeFragment)
             }
-            null -> progressBarAccessIg.hide()
+            null -> if(progressBarAccessIg != null) progressBarAccessIg.hide()
             else -> {
-                webView.hide()
-                progressBarAccessIg.hide()
                 accessTokenViewModel.getAccessToken(auth_code)
             }
         }
@@ -98,4 +97,5 @@ class AccessTokenFragment : Fragment(), AccessTokenListener {
             loadUrl(Constants.URL_INSTAGRAM_AUTH)
         }
     }
+
 }
