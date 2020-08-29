@@ -6,9 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -17,15 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.*
 import com.example.socialnetwork.adapter.AdapterRecyclerInstagram
 import com.example.socialnetwork.utils.*
-import com.facebook.Profile
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_instagram.*
 import kotlinx.android.synthetic.main.navigation_header.*
-import kotlinx.android.synthetic.main.profile_style.*
-import kotlinx.android.synthetic.main.profile_style.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class InstagramFragment : Fragment() {
@@ -114,13 +106,17 @@ class InstagramFragment : Fragment() {
                     adapterRecycler.addData(data)
             }
             is InstagramViewModel.StateLiveData.ErrorResponse -> {
+                Log.i("Carpul", "upDateUi: ErrorResponse")
                 makeToast(requireContext(), getString(R.string.error_conection_Ig))
+                findNavController().popBackStack()
                 findNavController().navigate(R.id.loginInstagramFragment)
+                
             }
         }
     }
 
     private fun setupToolbar(userName: String) {
+
         (activity as MainActivity).toolbar.setupToolbar(
             imageProvider = R.drawable.ic_instagram_white,
             textUserName = "@ $userName",
@@ -129,6 +125,7 @@ class InstagramFragment : Fragment() {
     }
 
     private fun setupNavigationView(userName: String) {
+
         (activity as MainActivity).headerNavigationView.setupHeaderNav(
             textHeader = " @$userName",
             imageHeaderDrawable = R.mipmap.ic_launcher
@@ -143,6 +140,7 @@ class InstagramFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         (activity as MainActivity).drawer.navDrawer.setupMenuItem(
             id = R.id.instagramFragment,
             titleMenu = getString(R.string.instagram),

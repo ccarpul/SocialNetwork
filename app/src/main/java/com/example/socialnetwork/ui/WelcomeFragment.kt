@@ -88,7 +88,7 @@ class WelcomeFragment : Fragment() {
                         requireContext(),
                         it.localizedMessage ?: getString(R.string.try_again)
                     )
-                }.addOnCanceledListener { Log.i("Carpul", "onViewCreated: Cancelado") }
+                }
             } else {
                 val passTokens = WelcomeFragmentDirections.actionWelcomeFragmentToTwitterFragment()
                     .setUserToken("$userToken,$userTokenSecret")
