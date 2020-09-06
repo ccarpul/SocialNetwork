@@ -24,8 +24,10 @@ class MyWebViewClient(private val listener: AccessTokenListener) : WebViewClient
         val code: String? =
             if (url?.startsWith(Constants.URI_REDIRECT)!!) {
                 when {
-                    url.contains("code=") -> getCodeFromUrl(url)
-                    url.contains("error_reason=user_denied") -> "denied"
+                    //url.contains("code=") -> getCodeFromUrl(url)
+                    "code=" in url -> getCodeFromUrl(url)
+                    //url.contains("error_reason=user_denied") -> "denied"
+                    "error_reason=user_denied" in url -> "denied"
                     else -> null
                 }
 
