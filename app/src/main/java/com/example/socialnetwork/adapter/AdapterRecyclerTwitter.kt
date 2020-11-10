@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.R
 import com.example.socialnetwork.utils.*
 import kotlinx.android.synthetic.main.recycler_style_twitter.view.*
+import org.koin.core.definition.indexKey
 import twitter4j.Status
+import twitter4j.User
+import kotlin.math.log
 
 
 class AdapterRecyclerTwitter(
@@ -29,12 +32,14 @@ class AdapterRecyclerTwitter(
             .inflate(R.layout.recycler_style_twitter, parent, false)
         return AdapterViewHolder(view)
     }
-
     fun addData(data: List<Status>) {
         listUserTweet.addAll(data)
         originalList = listUserTweet
+
+        //Log.i("Carpul", "addData: ${listUserTweet[17]}")
         notifyDataSetChanged()
     }
+
 
     fun getPosition(): Int {
         return pos
@@ -64,9 +69,12 @@ class AdapterRecyclerTwitter(
 
             pos = position
 
-            val mediaEntity = mediaEntity(listUserTweet[position])
+            //val mediaEntity = mediaEntity(listUserTweet[position])
+            val mediaEntity = listUserTweet[position].mediaEntity()
+            
             val mediaVideo =
                 if (mediaEntity?.type == "video") mediaEntity.getMediaUrl() else null
+
 
             holder.bind(
                 listUserTweet[position], mediaEntity?.mediaURLHttps, mediaEntity?.type,

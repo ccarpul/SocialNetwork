@@ -20,12 +20,12 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
 
-    private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPref: SharedPreferences.Editor
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)?.edit() ?: return
     }
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class SettingsFragment : Fragment() {
 
 
         logoutInstagram.setOnClickListener {
-            with(sharedPref.edit()){
+            with(sharedPref){
                 putString("accessTokenInstagram", null)
                 commit()
             }
@@ -64,7 +64,7 @@ class SettingsFragment : Fragment() {
         logoutTwitter.setOnClickListener {
             Firebase.auth.signOut()
 
-            with(sharedPref.edit()){
+            with(sharedPref){
                 putString("userToken", null)
                 putString("userTokenSecret", null)
                 commit()
@@ -82,6 +82,4 @@ class SettingsFragment : Fragment() {
             titleMenu = getString(R.string.settings),
             isSelected = false)
     }
-    
-
 }

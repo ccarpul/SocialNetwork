@@ -90,7 +90,8 @@ class WelcomeFragment : Fragment() {
                     )
                 }
             } else {
-                val passTokens = WelcomeFragmentDirections.actionWelcomeFragmentToTwitterFragment()
+                val passTokens =
+                    WelcomeFragmentDirections.actionWelcomeFragmentToTwitterFragment()
                     .setUserToken("$userToken,$userTokenSecret")
                 findNavController().navigate(passTokens)
 

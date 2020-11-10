@@ -60,7 +60,15 @@ fun View.gone() {
 
 fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager): Boolean {
 
-    val totalItems = this.adapter?.itemCount
+
+    val totalItems = adapter?.itemCount
+
+    return if(totalItems != 0)
+        RecyclerView.NO_POSITION != linearLayoutManager.findLastCompletelyVisibleItemPosition() &&
+            linearLayoutManager.findLastCompletelyVisibleItemPosition() == totalItems?.minus(1)
+    else false
+    /*
+    val totalItems = adapter?.itemCount
     if (totalItems != 0) {
         if (RecyclerView.NO_POSITION != linearLayoutManager.findLastCompletelyVisibleItemPosition() &&
             linearLayoutManager.findLastCompletelyVisibleItemPosition() == totalItems?.minus(1)
@@ -68,6 +76,9 @@ fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager
             return true
     }
     return false
+
+
+     */
 }
 
 fun View.userRefreshUiTwitter(data: Status) {
@@ -130,7 +141,6 @@ fun View.loadImageTweet(mediaType: String?, mediaUrl: String?) {
         "video" -> iconPlayVideo.show()
         null -> cardImageTweet.hide()
         else -> iconPlayVideo.hide()
-
     }
 }
 
@@ -233,7 +243,6 @@ fun ViewGroup.setupHeaderNav(
     else this.textHeaderTitle.gone()
 
 }
-
 
 fun NavigationView.setupMenuItem(
     id: Int,

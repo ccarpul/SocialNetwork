@@ -1,6 +1,5 @@
 package com.example.socialnetwork.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,10 +48,8 @@ class AdapterRecyclerInstagram(
         }
     }
 
-    class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: Data) {
-
-
             itemView.apply {
                 userInstagram.text = data.username
                 textImageInstagram.text = "${data.username} ${data.caption}"
