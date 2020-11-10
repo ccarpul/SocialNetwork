@@ -16,7 +16,6 @@ import com.example.socialnetwork.utils.hide
 import com.example.socialnetwork.utils.makeToast
 import com.example.socialnetwork.utils.show
 import com.google.android.gms.tasks.Task
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
@@ -26,24 +25,16 @@ import kotlinx.android.synthetic.main.fragment_welcome.*
 
 class WelcomeFragment : Fragment() {
 
-    private lateinit var firebaseAuth: FirebaseAuth
-    private var pendingAuthResult: Task<AuthResult>? = null
-    private var userToken: String? = null
-    private var userTokenSecret: String? = null
-    private lateinit var sharedPref: SharedPreferences
-    private var accessTokenInstagram: String = ""
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        firebaseAuth = FirebaseAuth.getInstance()
-        pendingAuthResult = firebaseAuth.pendingAuthResult
-        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        accessTokenInstagram = sharedPref.getString("accessTokenInstagram", "").toString()
-
+    private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val sharedPref: SharedPreferences? by lazy { activity?.getPreferences(Context.MODE_PRIVATE) }
+    private val accessTokenInstagram: String by lazy {
+        sharedPref?.getString("accessTokenInstagram", "").toString()
     }
 
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_welcome, container, false)
 
     }
@@ -55,34 +46,35 @@ class WelcomeFragment : Fragment() {
         gotoInstagram.setOnClickListener {
 
             if (accessTokenInstagram == "") {
-                val passUrl
-                        = WelcomeFragmentDirections
+                val passUrl = WelcomeFragmentDirections
                     .actionWelcomeFragmentToLoginInstagramFragment(Constants.URL_INSTAGRAM_AUTH)
                 findNavController().navigate(passUrl)
-            } else {
-                findNavController().navigate(R.id.action_welcomeFragment_to_instagramFragment)
-            }
+            } else findNavController().navigate(R.id.action_welcomeFragment_to_instagramFragment)
         }
 
         gotoTwitter.setOnClickListener {
 
             progressBarWelcome.show()
-            if (FirebaseAuth.getInstance().currentUser == null) {
-                setLoginByTwitter().addOnCompleteListener {
+            if (firebaseAuth.currentUser == null) {
+                setLoginByTwitter()?.addOnCompleteListener { it ->
 
                     try {
                         val oAuthCredential = it.result?.credential as OAuthCredential
-                        with(sharedPref.edit()) {
-                            putString("userToken", oAuthCredential.accessToken)
-                            putString("userTokenSecret", oAuthCredential.secret)
-                            commit()
+
+                        sharedPref?.let {sharedPref ->
+                            with(sharedPref.edit()) {
+                                putString("userToken", oAuthCredential.accessToken)
+                                putString("userTokenSecret", oAuthCredential.secret)
+                                commit()
+                            }
                         }
                         progressBarWelcome.hide()
                         findNavController().navigate(R.id.twitterFragment)
-                    }catch (e: Exception){
+                    } catch (e: Exception) {
                         Log.i("Carpul", "onViewCreated: $e")
                     }
-                }.addOnFailureListener {
+
+                }?.addOnFailureListener {
                     progressBarWelcome.hide()
                     makeToast(
                         requireContext(),
@@ -90,25 +82,22 @@ class WelcomeFragment : Fragment() {
                     )
                 }
             } else {
-                val passTokens =
-                    WelcomeFragmentDirections.actionWelcomeFragmentToTwitterFragment()
-                    .setUserToken("$userToken,$userTokenSecret")
+                val passTokens = WelcomeFragmentDirections
+                    .actionWelcomeFragmentToTwitterFragment()
+                    .setUserToken(null + "," + null)
                 findNavController().navigate(passTokens)
-
             }
         }
     }
 
-    private fun setLoginByTwitter(): Task<AuthResult> {
-        return if (pendingAuthResult != null) {
-            pendingAuthResult!!
-        } else {
-
+    private fun setLoginByTwitter(): Task<AuthResult>? =
+        if (firebaseAuth.pendingAuthResult != null) firebaseAuth.pendingAuthResult
+        else {
             val oAuthProvider = OAuthProvider.newBuilder("twitter.com")
             firebaseAuth.startActivityForSignInWithProvider(
                 requireActivity(),
                 oAuthProvider.build()
             )
         }
-    }
+
 }

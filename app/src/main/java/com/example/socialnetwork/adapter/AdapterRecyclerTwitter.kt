@@ -40,18 +40,13 @@ class AdapterRecyclerTwitter(
         notifyDataSetChanged()
     }
 
-
-    fun getPosition(): Int {
-        return pos
-    }
+    fun getPosition(): Int = pos
 
     fun cleanList() {
         listUserTweet = mutableListOf()
     }
 
-    fun getOriginalList(): MutableList<Status> {
-        return originalList
-    }
+    fun getOriginalList(): MutableList<Status> = originalList
 
     override fun getItemCount(): Int = listUserTweet.size
 
@@ -110,8 +105,9 @@ class AdapterRecyclerTwitter(
 
     fun goToTweetUrl(passTweetUrl: String, view: View) {
         try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(passTweetUrl))
-            startActivity(view.context, intent, null)
+            startActivity(view.context,
+                Intent(Intent.ACTION_VIEW, Uri.parse(passTweetUrl)),
+                null)
 
         } catch (e: Exception) { Log.i("Carpul", "bind: $e") }
     }

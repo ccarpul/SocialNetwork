@@ -60,25 +60,11 @@ fun View.gone() {
 
 fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager): Boolean {
 
-
     val totalItems = adapter?.itemCount
-
     return if(totalItems != 0)
         RecyclerView.NO_POSITION != linearLayoutManager.findLastCompletelyVisibleItemPosition() &&
             linearLayoutManager.findLastCompletelyVisibleItemPosition() == totalItems?.minus(1)
     else false
-    /*
-    val totalItems = adapter?.itemCount
-    if (totalItems != 0) {
-        if (RecyclerView.NO_POSITION != linearLayoutManager.findLastCompletelyVisibleItemPosition() &&
-            linearLayoutManager.findLastCompletelyVisibleItemPosition() == totalItems?.minus(1)
-        )
-            return true
-    }
-    return false
-
-
-     */
 }
 
 fun View.userRefreshUiTwitter(data: Status) {

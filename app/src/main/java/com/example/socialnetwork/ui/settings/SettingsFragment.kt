@@ -1,5 +1,6 @@
 package com.example.socialnetwork.ui.settings
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -22,6 +23,7 @@ class SettingsFragment : Fragment() {
 
     private lateinit var sharedPref: SharedPreferences.Editor
 
+    @SuppressLint("CommitPrefEdits")
     override fun onAttach(context: Context) {
         super.onAttach(context)
 

@@ -38,13 +38,17 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
     AdapterRecyclerTwitter.OnclickTweet {
 
     private val twitterViewModel: TwitterViewModel by viewModel()
-
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private var adapterRecycler: AdapterRecyclerTwitter =
+    private val adapterRecycler: AdapterRecyclerTwitter by lazy {
         AdapterRecyclerTwitter(arrayListOf(), this)
-    private var userToken: String? = null
-    private var userTokenSecret: String? = null
+    }
+    private val userToken: String? by lazy { activity?.getPreferences(Context.MODE_PRIVATE)
+            ?.getString("userToken", null).toString()
+    }
+    private val userTokenSecret: String? by lazy { activity?.getPreferences(Context.MODE_PRIVATE)
+            ?.getString("userTokenSecret", null).toString()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,7 +59,6 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
                 navigate(R.id.welcomeFragment)
             }
         }
-        getTokens()
         twitterViewModel.modelTwitter.observe(this, Observer(::upDateUi))
     }
 
@@ -101,18 +104,12 @@ class TwitterFragment : Fragment(), AdapterRecyclerTwitter.OnClickImageTweet,
     }
 
     private fun setupRecyclerView() {
-        linearLayoutManager = LinearLayoutManager(requireContext())
+
         twitterRecyclerView.apply {
+            linearLayoutManager = LinearLayoutManager(requireContext())
             layoutManager = linearLayoutManager
             adapter = adapterRecycler
         }
-    }
-
-    private fun getTokens() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        userToken = sharedPref.getString("userToken", null)
-        userTokenSecret = sharedPref.getString("userTokenSecret", null)
-
     }
 
     private fun setupToolbar() {
