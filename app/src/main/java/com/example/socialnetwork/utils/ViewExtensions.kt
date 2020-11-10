@@ -24,7 +24,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.socialnetwork.R
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.CornerSize
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.profile_style.view.*
 import kotlinx.android.synthetic.main.recycler_style_instagram.view.*
@@ -46,17 +49,9 @@ fun makeToast(context: Context?, message: String) {
     }
 }
 
-fun View.hide() {
-    isVisible = false
-}  //Using KTX
-
-fun View.show() {
-    isVisible = true
-}
-
-fun View.gone() {
-    isGone = true
-}
+fun View.hide() { isVisible = false }  //Using KTX
+fun View.show() { isVisible = true }
+fun View.gone() { isGone = true }
 
 fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager): Boolean {
 
@@ -113,20 +108,19 @@ fun View.retweetUserRefreshUiTwitter(data: Status) {
 fun View.loadImageTweet(mediaType: String?, mediaUrl: String?) {
 
     if (!mediaUrl.isNullOrBlank()) {
-        Glide.with(this.context)
-            .apply {
-                if (mediaType == "animate_gif")
-                    this.asGif()
-            }
+        Glide.with(context)
+            .apply { if (mediaType == "animate_gif") asGif() }
             .load(mediaUrl)
-            .centerCrop()
             .into(imageTweet)
-        cardImageTweet.show()
+        imageTweet.show()
     }
     when (mediaType) {
         "video" -> iconPlayVideo.show()
-        null -> cardImageTweet.hide()
-        else -> iconPlayVideo.hide()
+        null -> {
+            imageTweet.hide()
+            iconPlayVideo.visibility = View.INVISIBLE
+        }
+        else -> iconPlayVideo.visibility = View.INVISIBLE
     }
 }
 
@@ -245,5 +239,12 @@ fun NavigationView.setupMenuItem(
             titleMenuSpannable
         } else titleMenu
     }
+}
+
+fun ShapeableImageView.setShape(cornerSize: Float = 20F){
+    shapeAppearanceModel = shapeAppearanceModel
+        .toBuilder()
+        .setAllCorners(CornerFamily.ROUNDED,cornerSize)
+        .build()
 }
 

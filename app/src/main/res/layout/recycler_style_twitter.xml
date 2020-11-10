@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tool:text="User Name Retweeted" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilePhotoTwitter"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -75,78 +75,60 @@
         app:layout_constraintTop_toBottomOf="@+id/screenNameTwitter"
         tool:text="Text Tweet" />
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardImageTweet"
-        android:layout_width="340dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="4dp"
-        app:cardCornerRadius="10dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageTweet"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="8dp"
+        android:contentDescription="TODO"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/descriptionImageInstagram"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionImageInstagram">
+        app:layout_constraintStart_toEndOf="@+id/profilePhotoTwitter"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionImageInstagram"
+        tool:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iconPlayVideo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="TODO"
+        android:visibility="invisible"
+        android:src="@drawable/ic_play_video"
+        app:layout_constraintBottom_toBottomOf="@+id/imageTweet"
+        app:layout_constraintEnd_toEndOf="@+id/imageTweet"
+        app:layout_constraintStart_toStartOf="@+id/imageTweet"
+        app:layout_constraintTop_toTopOf="@+id/imageTweet" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageTweet"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="TODO"
-                android:layout_centerInParent="true"
-                tool:srcCompat="@tools:sample/avatars" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iconPlayVideo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:contentDescription="TODO"
-                android:src="@drawable/ic_play_video" />
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/retweetCount"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:drawableStart="@drawable/ic_retweet"
         android:ellipsize="end"
         android:maxLength="20"
         android:maxLines="1"
-        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardImageTweet"
-        tool:ignore="SmallSp"
+        app:layout_constraintStart_toEndOf="@+id/iconPlayVideo"
+        app:layout_constraintTop_toBottomOf="@+id/imageTweet"
         tool:text="0" />
 
     <TextView
         android:id="@+id/likesCountTweet"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="80dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:drawableLeft="@drawable/ic_outline_favorite_border_24"
         android:ellipsize="end"
         android:maxLength="20"
         android:maxLines="1"
-        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardImageTweet"
-        tool:ignore="SmallSp"
+        app:layout_constraintEnd_toStartOf="@+id/iconPlayVideo"
+        app:layout_constraintTop_toBottomOf="@+id/imageTweet"
         tool:text="0" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,20 +24,21 @@ class AdapterRecyclerTwitter(
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    fun addData(data: List<Status>) {
+        listUserTweet.addAll(data)
+        originalList = listUserTweet
+        notifyDataSetChanged()
+    }
+
     private lateinit var originalList: MutableList<Status>
     private var pos = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recycler_style_twitter, parent, false)
+        view.imageTweet.setShape(10F)
+        view.profilePhotoTwitter.setShape(30F)
         return AdapterViewHolder(view)
-    }
-    fun addData(data: List<Status>) {
-        listUserTweet.addAll(data)
-        originalList = listUserTweet
-
-        //Log.i("Carpul", "addData: ${listUserTweet[17]}")
-        notifyDataSetChanged()
     }
 
     fun getPosition(): Int = pos
@@ -63,10 +64,8 @@ class AdapterRecyclerTwitter(
         if (holder is AdapterViewHolder) {
 
             pos = position
-
             //val mediaEntity = mediaEntity(listUserTweet[position])
             val mediaEntity = listUserTweet[position].mediaEntity()
-            
             val mediaVideo =
                 if (mediaEntity?.type == "video") mediaEntity.getMediaUrl() else null
 
