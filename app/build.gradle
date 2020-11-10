@@ -17,24 +17,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-
         //biblioteca de compatibilidad de Android X para los dibujos vectoriales que se remontan al nivel API 7.
         vectorDrawables.useSupportLibrary = true
-    }
-
-
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debug {
-                applicationIdSuffix '.debug'
-                versionNameSuffix '.debug'
-                debuggable true
-                signingConfigs
-            }
-        }
     }
 
     signingConfigs {
@@ -44,11 +28,24 @@ android {
                 storePassword "android"
                 keyAlias "androiddebugkey"
                 keyPassword "android"
-            } catch (Throwable ignored) {
-
-            }
+            } catch (Throwable ignored) {}
         }
     }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '.debug'
+            debuggable true
+            signingConfigs.qa
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
     /**Para Evitar el Siguiente Error:  Cannot inline bytecode built with JVM target 1.8 into
      bytecode that is being built with JVM target 1.6. Please specify proper '-jvm-target' option*/
     kotlinOptions {
@@ -63,6 +60,8 @@ android {
         viewBinding = true
     }
 }
+
+
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
