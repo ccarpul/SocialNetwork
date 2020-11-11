@@ -1,58 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/backgroundCardView"
-    android:orientation="vertical">
+    android:background="@color/white">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_margin="10dp">
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profilePhotoInstagram"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tool:srcCompat="@drawable/ic_profile_default" />
 
-        <ImageView
-            android:id="@+id/profilePhotoInstagram"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="4dp"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="TODO"
-            tool:srcCompat="@drawable/ic_profile_default" />
+    <TextView
+        android:id="@+id/userInstagram"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePhotoInstagram"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profilePhotoInstagram"
+        app:layout_constraintTop_toTopOf="@+id/profilePhotoInstagram"
+        tool:text="User Instagram" />
 
-
-        <TextView
-            android:id="@+id/userInstagram"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:padding="4dp"
-            android:textStyle="bold"
-            tool:text="User Instagram" />
-
-    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageInstagram"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
         android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhotoInstagram"
         tool:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <!--
-    <VideoView
-        android:id="@+id/videoViewIg"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:visibility="gone"
-        tool:srcCompat="@tools:sample/avatars" />
-     -->
 
     <TextView
         android:id="@+id/textImageInstagram"
@@ -65,5 +58,4 @@
         tool:layout_editor_absoluteX="-6dp"
         tool:text="Description" />
 
-
-</androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

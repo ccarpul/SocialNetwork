@@ -84,7 +84,7 @@ fun View.userRefreshUiTwitter(data: Status) {
             R.drawable.ic_verified_tw, 0, 0, 0
         )
     if (!data.user.profileImageURLHttps.isNullOrBlank()) {
-        Glide.with(this.context)
+        Glide.with(context)
             .load(data.user.profileImageURLHttps.getClearImageUrl())
             .override(140, 140)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
@@ -107,7 +107,7 @@ fun View.retweetUserRefreshUiTwitter(data: Status) {
         )
 
     if (!data.retweetedStatus.user.profileImageURLHttps.isNullOrBlank()) {
-        Glide.with(this.context)
+        Glide.with(context)
             .load(data.retweetedStatus.user.profileImageURLHttps.getClearImageUrl())
             .override(140, 140)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
@@ -146,14 +146,14 @@ fun View.loadImageInstagram(mediaUrl: String) {
 
     if (!mediaUrl.isBlank()) {
 
-        Glide.with(this.context)
+        Glide.with(context)
             .load(mediaUrl)
             .into(imageInstagram)
 
-        Glide.with(this.context)
+        Glide.with(context)
             .load(mediaUrl)
+            .override(80, 80)
             .placeholder(R.drawable.ic_profile_default)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
             .into(profilePhotoInstagram)
     }
 }
