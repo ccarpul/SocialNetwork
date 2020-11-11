@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
@@ -13,6 +14,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.socialnetwork.R
@@ -39,15 +43,17 @@ import twitter4j.Status
 fun makeToast(context: Context?, message: String) {
 
     val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
-    val layout = toast.view as LinearLayout
-    layout.setBackgroundResource(R.drawable.custom_bg_edittext)
-    layout.setPadding(20)
-    val viewMessage = layout.getChildAt(0) as TextView
-    viewMessage.setTextColor(Color.WHITE)
-    viewMessage.textSize = 16f
-    toast.apply {
-        setGravity(Gravity.BOTTOM, 0, 400)
-        show()
+        .apply {
+            setGravity(Gravity.BOTTOM, 0, 400)
+            show()
+        }
+    (toast.view as LinearLayout).apply {
+        setBackgroundResource(R.drawable.custom_bg_edittext)
+        setPadding(20)
+        (getChildAt(0) as TextView).apply {
+            setTextColor(Color.WHITE)
+            textSize = 16f
+        }
     }
 }
 
@@ -72,47 +78,29 @@ fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager
     else false
 }
 
-fun View.userRefreshUiTwitter(data: Status) {
-    retweetUser.hide()
-    descriptionImageInstagram.text = data.text
-    userTwitter.text = data.user.name
-    likesCountTweet.text = data.user.favouritesCount.toString()
-    screenNameTwitter.text = "@" + data.user.screenName
-    retweetCount.text = data.retweetCount.toString()
-    if (data.user.isVerified)
-        screenNameTwitter.setCompoundDrawablesWithIntrinsicBounds(
-            R.drawable.ic_verified_tw, 0, 0, 0
-        )
-    if (!data.user.profileImageURLHttps.isNullOrBlank()) {
-        Glide.with(context)
-            .load(data.user.profileImageURLHttps.getClearImageUrl())
-            .override(140, 140)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
-            .into(profilePhotoTwitter)
-    } else profilePhotoTwitter.setImageDrawable(resources.getDrawable(R.drawable.ic_profile_default))
-}
+fun View.refreshUi(data: Status?) {
 
-fun View.retweetUserRefreshUiTwitter(data: Status) {
+    descriptionImageInstagram.text = data?.text
 
-    retweetUser.text = data.user.name + context.getString(R.string.retwitted)
-    retweetUser.show()
-    descriptionImageInstagram.text = data.retweetedStatus.text
-    userTwitter.text = data.retweetedStatus.user.name
-    likesCountTweet.text = data.retweetedStatus.user.favouritesCount.toString()
-    screenNameTwitter.text = "@" + data.retweetedStatus.user.screenName
-    retweetCount.text = data.retweetedStatus.retweetCount.toString()
-    if (data.retweetedStatus.user.isVerified)
+    data?.user?.let {
+        userTwitter.text = it.name
+        likesCountTweet.text = it.favouritesCount.toString()
+        screenNameTwitter.text = "@ + ${it?.screenName}"
+        retweetCount.text = data?.retweetCount.toString()
         screenNameTwitter.setCompoundDrawablesWithIntrinsicBounds(
             R.drawable.ic_verified_tw, 0, 0, 0
         )
 
-    if (!data.retweetedStatus.user.profileImageURLHttps.isNullOrBlank()) {
-        Glide.with(context)
-            .load(data.retweetedStatus.user.profileImageURLHttps.getClearImageUrl())
-            .override(140, 140)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
-            .into(profilePhotoTwitter)
-    } else profilePhotoTwitter.setImageDrawable(resources.getDrawable(R.drawable.ic_profile_default))
+        if (!it.profileImageURLHttps.isNullOrBlank()) {
+            Glide.with(context)
+                .load(it.profileImageURLHttps?.getClearImageUrl())
+                .override(140, 140)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
+                .into(profilePhotoTwitter)
+        } else profilePhotoTwitter
+            .setImageDrawable(resources.getDrawable(R.drawable.ic_profile_default))
+
+    }
 }
 
 fun View.loadImageTweet(mediaType: String, mediaUrl: String) {
@@ -124,7 +112,7 @@ fun View.loadImageTweet(mediaType: String, mediaUrl: String) {
 
     if (mediaType == "video")
         iconPlayVideo.show()
-    else if(mediaUrl.isEmpty()){
+    else if (mediaUrl.isEmpty()) {
         imageTweet.hide()
         iconPlayVideo.visibility = View.INVISIBLE
     }
@@ -132,17 +120,6 @@ fun View.loadImageTweet(mediaType: String, mediaUrl: String) {
 
 
 fun View.loadImageInstagram(mediaUrl: String) {
-
-    /*
-    if (mediaUrl.contains("video")) {
-        //imageInstagram.gone()
-        //videoViewIg.setVideoPath(mediaUrl)
-        //videoViewIg.start()
-        //videoViewIg.show()
-        //videoViewIg.pause()
-        imageInstagram.hide()
-    } else {*/
-    //videoViewIg.gone()
 
     if (!mediaUrl.isBlank()) {
 
@@ -168,36 +145,37 @@ fun Toolbar.setupToolbar(
     imageProvider: Int? = null,
     imageNavigationIcon: String? = null
 ) {
-
-    if (visible != null) this.visibility = visible
-
-    screenNameToolbar.visibility = screenVisible
+    visible?.let { visibility = it }
     userNameToolbar.visibility = userNameVisible
+    screenNameToolbar.visibility = screenVisible
     imageProviderToolbar.visibility = imageProviderVisible
-
-    if (textUserName != null) userNameToolbar.text = textUserName
-
-    if (textScreenName != null || textScreenName != "") screenNameToolbar.text = textScreenName
-    else screenNameToolbar.gone()
-
-    if (imageProvider != null)
-        imageProviderToolbar.setImageDrawable(getDrawable(this.context, imageProvider))
-
-    if (imageNavigationIcon == null)
-        navigationIcon = ContextCompat.getDrawable(this.context, R.drawable.ic_hamburger_24)
-    else {
-        Glide.with(context).asBitmap()
-            .load(imageNavigationIcon.getClearImageUrl())
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
-            .into(object : SimpleTarget<Bitmap>(60, 60) {
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: Transition<in Bitmap>?
-                ) {
-                    navigationIcon = BitmapDrawable(resources, resource)
-                }
-            })
+    textScreenName?.let { userNameToolbar.text = textUserName }
+    textScreenName?.let {
+        if (it.isNotBlank()) screenNameToolbar.text = it else screenNameToolbar.gone()
     }
+
+    val scale: Float = resources.displayMetrics.density
+
+
+    imageProvider?.let { imageProviderToolbar.setImageDrawable(getDrawable(context, it)) }
+    Log.i("carpul", "setupToolbar: ${imageNavigationIcon?.getClearImageUrl() }")
+    Log.i("carpul", "setupToolbar: $imageNavigationIcon")
+    if (imageNavigationIcon != null)
+        Glide.with(context)
+            .asDrawable()
+            .load(imageNavigationIcon.getClearImageUrl())
+            .apply(RequestOptions().override((50 * scale).toInt()))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
+            .into(object : CustomTarget<Drawable>() {
+                override fun onResourceReady(
+                    @NonNull resource: Drawable,
+                    @Nullable transition: Transition<in Drawable>?
+                ) { navigationIcon = resource }
+
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            }
+            )
+    else navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_hamburger_24)
 }
 
 fun ViewGroup.setupHeaderNav(
