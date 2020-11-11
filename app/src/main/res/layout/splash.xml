@@ -18,26 +18,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="38dp"
+        android:id="@+id/from"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginBottom="2dp"
         android:fontFamily="casual"
-        android:text="From"
         android:textAlignment="center"
         android:textColor="#FF8A65"
         android:textStyle="bold|italic"
         app:fontFamily="casual"
-        app:layout_constraintBottom_toTopOf="@+id/appCompatTextView"
+        app:layout_constraintBottom_toTopOf="@+id/nameCompany"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/appCompatTextView"
+        android:id="@+id/nameCompany"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
         android:fontFamily="serif-monospace"
-        android:text="@string/carpul_company"
         android:textAlignment="center"
         android:textColor="#81C784"
         android:textSize="20sp"

@@ -6,29 +6,50 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.socialnetwork.MainActivity
 import com.example.socialnetwork.R
-import java.util.*
+import kotlinx.android.synthetic.main.splash.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 
-class Splash: AppCompatActivity() {
+class Splash : AppCompatActivity() {
 
-    private var timer = Timer()
+    lateinit var job: Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        + View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        scheduleTask()
+        +View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+
+
+        job = GlobalScope.launch(Dispatchers.Main) {
+            val intent = Intent(this@Splash, MainActivity::class.java)
+            var name = ""
+            sendMessage("F\tr\to\tm\t", 50).collect {
+                name += it
+                from.text = name
+            }
+            name = ""
+            sendMessage(resources.getString(R.string.carpul_company), 50).collect {
+                name += it
+                nameCompany.text = name
+            }
+            delay(1_000)
+            startActivity(intent)
+            finish()
+        }
     }
 
-    private fun scheduleTask() {
-        val intent = Intent(this, MainActivity::class.java)
-        val task = object : TimerTask() {
-            override fun run() {
-                startActivity(intent)
-                finish()
-            }
+    private fun sendMessage(word: String, time: Long) = flow {
+        word.forEach {
+            delay(time)
+            emit(it)
         }
-        timer.schedule(task, 2_000L)
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+       job.cancel()
     }
 }
