@@ -154,17 +154,13 @@ fun Toolbar.setupToolbar(
         if (it.isNotBlank()) screenNameToolbar.text = it else screenNameToolbar.gone()
     }
 
-    val scale: Float = resources.displayMetrics.density
-
-
     imageProvider?.let { imageProviderToolbar.setImageDrawable(getDrawable(context, it)) }
-    Log.i("carpul", "setupToolbar: ${imageNavigationIcon?.getClearImageUrl() }")
-    Log.i("carpul", "setupToolbar: $imageNavigationIcon")
+
     if (imageNavigationIcon != null)
         Glide.with(context)
             .asDrawable()
             .load(imageNavigationIcon.getClearImageUrl())
-            .apply(RequestOptions().override((50 * scale).toInt()))
+            .override((50 * resources.displayMetrics.density).toInt())
             .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
             .into(object : CustomTarget<Drawable>() {
                 override fun onResourceReady(
@@ -188,14 +184,14 @@ fun ViewGroup.setupHeaderNav(
     when {
         imageHeaderDrawable != null -> imageHeadNavigation.setImageResource(imageHeaderDrawable)
         imageHeaderUri != null -> {
-            Glide.with(this.context)
+            Glide.with(context)
                 .load(imageHeaderUri)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
                 .placeholder(R.mipmap.ic_launcher_foreground)
                 .into(imageHeadNavigation)
         }
         imageHeaderUrl != null -> {
-            Glide.with(this.context)
+            Glide.with(context)
                 .load(imageHeaderUrl)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(200)))
                 .placeholder(R.mipmap.ic_launcher_foreground)
@@ -205,7 +201,7 @@ fun ViewGroup.setupHeaderNav(
     }
 
     if (textHeader != null) textHeaderTitle.text = textHeader
-    else this.textHeaderTitle.gone()
+    else textHeaderTitle.gone()
 
 }
 
@@ -214,14 +210,13 @@ fun NavigationView.setupMenuItem(
     titleMenu: String,
     isSelected: Boolean = false
 ) {
-
-    val color = this.context.getColor(R.color.colorAccent)
     menu.findItem(id).apply {
         isEnabled = !isSelected
-        title = if (isSelected) {
-            val titleMenuSpannable = SpannableString(titleMenu)
-            titleMenuSpannable.setSpan(ForegroundColorSpan(color), 0, titleMenu.length, 0)
-            titleMenuSpannable
+        title = if (!isEnabled) {
+            SpannableString(titleMenu).apply {
+                setSpan(ForegroundColorSpan(context.getColor(R.color.colorAccent)),
+                    0, titleMenu.length, 0)
+            }
         } else titleMenu
     }
 }
