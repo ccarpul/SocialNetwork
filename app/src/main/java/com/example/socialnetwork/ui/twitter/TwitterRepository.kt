@@ -16,7 +16,7 @@ class TwitterRepository() {
         withContext(Dispatchers.IO) {
             safeApiCall(dispatcher) {
 
-                val paging = Paging(page, 10)
+                val paging = Paging(page, 30)
                 val config = ConfigurationBuilder()
                     .setDebugEnabled(true)
                     .setOAuthConsumerKey(Constants.CONSUMER_KEY)

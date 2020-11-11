@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.profile_style.view.*
 import kotlinx.android.synthetic.main.recycler_style_instagram.view.*
 import kotlinx.android.synthetic.main.recycler_style_twitter.view.*
+import twitter4j.MediaEntity
 import twitter4j.Status
 
 fun makeToast(context: Context?, message: String) {
@@ -49,16 +51,24 @@ fun makeToast(context: Context?, message: String) {
     }
 }
 
-fun View.hide() { isVisible = false }  //Using KTX
-fun View.show() { isVisible = true }
-fun View.gone() { isGone = true }
+fun View.hide() {
+    isVisible = false
+}  //Using KTX
+
+fun View.show() {
+    isVisible = true
+}
+
+fun View.gone() {
+    isGone = true
+}
 
 fun RecyclerView.isLastArticleDisplayed(linearLayoutManager: LinearLayoutManager): Boolean {
 
     val totalItems = adapter?.itemCount
-    return if(totalItems != 0)
+    return if (totalItems != 0)
         RecyclerView.NO_POSITION != linearLayoutManager.findLastCompletelyVisibleItemPosition() &&
-            linearLayoutManager.findLastCompletelyVisibleItemPosition() == totalItems?.minus(1)
+                linearLayoutManager.findLastCompletelyVisibleItemPosition() == totalItems?.minus(1)
     else false
 }
 
@@ -105,24 +115,21 @@ fun View.retweetUserRefreshUiTwitter(data: Status) {
     } else profilePhotoTwitter.setImageDrawable(resources.getDrawable(R.drawable.ic_profile_default))
 }
 
-fun View.loadImageTweet(mediaType: String?, mediaUrl: String?) {
+fun View.loadImageTweet(mediaType: String, mediaUrl: String) {
 
-    if (!mediaUrl.isNullOrBlank()) {
-        Glide.with(context)
-            .apply { if (mediaType == "animate_gif") asGif() }
-            .load(mediaUrl)
-            .into(imageTweet)
-        imageTweet.show()
-    }
-    when (mediaType) {
-        "video" -> iconPlayVideo.show()
-        null -> {
-            imageTweet.hide()
-            iconPlayVideo.visibility = View.INVISIBLE
-        }
-        else -> iconPlayVideo.visibility = View.INVISIBLE
+    Glide.with(context)
+        .load(mediaUrl)
+        .into(imageTweet)
+    imageTweet.show()
+
+    if (mediaType == "video")
+        iconPlayVideo.show()
+    else if(mediaUrl.isEmpty()){
+        imageTweet.hide()
+        iconPlayVideo.visibility = View.INVISIBLE
     }
 }
+
 
 fun View.loadImageInstagram(mediaUrl: String) {
 
@@ -137,7 +144,7 @@ fun View.loadImageInstagram(mediaUrl: String) {
     } else {*/
     //videoViewIg.gone()
 
-    if (!mediaUrl.isNullOrBlank()) {
+    if (!mediaUrl.isBlank()) {
 
         Glide.with(this.context)
             .load(mediaUrl)
@@ -179,10 +186,10 @@ fun Toolbar.setupToolbar(
     if (imageNavigationIcon == null)
         navigationIcon = ContextCompat.getDrawable(this.context, R.drawable.ic_hamburger_24)
     else {
-        Glide.with(this.context).asBitmap()
+        Glide.with(context).asBitmap()
             .load(imageNavigationIcon.getClearImageUrl())
             .apply(RequestOptions.bitmapTransform(RoundedCorners(100)))
-            .into(object : SimpleTarget<Bitmap>(140, 140) {
+            .into(object : SimpleTarget<Bitmap>(60, 60) {
                 override fun onResourceReady(
                     resource: Bitmap,
                     transition: Transition<in Bitmap>?
@@ -241,10 +248,10 @@ fun NavigationView.setupMenuItem(
     }
 }
 
-fun ShapeableImageView.setShape(cornerSize: Float = 20F){
+fun ShapeableImageView.setShape(cornerSize: Float = 20F) {
     shapeAppearanceModel = shapeAppearanceModel
         .toBuilder()
-        .setAllCorners(CornerFamily.ROUNDED,cornerSize)
+        .setAllCorners(CornerFamily.ROUNDED, cornerSize)
         .build()
 }
 

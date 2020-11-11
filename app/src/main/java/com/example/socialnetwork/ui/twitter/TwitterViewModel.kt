@@ -4,15 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.socialnetwork.data.model.ModelResponseTwitter
-import com.example.socialnetwork.utils.Constants
 import com.example.socialnetwork.utils.ResultWrapper
 import kotlinx.coroutines.*
-import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
-import twitter4j.TwitterFactory
-import twitter4j.conf.ConfigurationBuilder
 import kotlin.coroutines.CoroutineContext
 
 class TwitterViewModel(private val twitterRespository: TwitterRepository) : ViewModel(),
