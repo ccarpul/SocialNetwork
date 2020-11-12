@@ -26,10 +26,11 @@ class Splash : AppCompatActivity() {
         job = GlobalScope.launch(Dispatchers.Main) {
             val intent = Intent(this@Splash, MainActivity::class.java)
             var name = ""
-            sendMessage("F\tr\to\tm\t", 50).collect {
+            sendMessage("F\tr\to\tm\t", 100).collect {
                 name += it
                 from.text = name
             }
+            delay(300)
             name = ""
             sendMessage(resources.getString(R.string.carpul_company), 50).collect {
                 name += it
@@ -47,6 +48,8 @@ class Splash : AppCompatActivity() {
             emit(it)
         }
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
