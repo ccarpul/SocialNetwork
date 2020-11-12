@@ -72,7 +72,7 @@ class InstagramFragment : Fragment() {
 
                 instagramViewModel.pos = adapterRecycler.getPosition()
 
-                if (instagramRecyclerView.isLastArticleDisplayed(linearLayoutManager)) {
+                if (/*instagramRecyclerView.isLastArticleDisplayed(linearLayoutManager)*/false) {
                     if (instagramViewModel.mediaCount - instagramViewModel.pos >= 4)
                         instagramViewModel.getData(code)
                     else makeToast(requireContext(), getString(R.string.endList))
@@ -87,23 +87,21 @@ class InstagramFragment : Fragment() {
                 instagramViewModel.getData(code)
                 instagramViewModel.getProfile(code)
             }
-            is InstagramViewModel.StateLiveData.PreCall -> {
-                progressBarIg.show()
-            }
+            is InstagramViewModel.StateLiveData.PreCall ->  progressBarIg.show()
+
             is InstagramViewModel.StateLiveData.RefreshStateUi -> {
-                adapterRecycler.addData(state.response)
+                adapterRecycler.addData(state.data)
+                instagramRecyclerView.smoothScrollToPosition(0)
             }
-            is InstagramViewModel.StateLiveData.PostCall -> {
-                progressBarIg.hide()
-            }
+            is InstagramViewModel.StateLiveData.PostCall -> progressBarIg.hide()
+
             is InstagramViewModel.StateLiveData.RefreshStateProfile -> {
 
                 setupToolbar(state.response.username)
                 setupNavigationView(state.response.username)
             }
             is InstagramViewModel.StateLiveData.AdapterRecycler -> {
-                for (data in state.dataRecyclerView)
-                    adapterRecycler.addData(data)
+                   // adapterRecycler.addData(state.dataRecyclerView)
             }
             is InstagramViewModel.StateLiveData.ErrorResponse -> {
                 Log.i("Carpul", "upDateUi: ErrorResponse")

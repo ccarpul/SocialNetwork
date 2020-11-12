@@ -1,7 +1,7 @@
 package com.example.socialnetwork.data
 
 import com.example.socialnetwork.utils.Constants
-import com.example.socialnetwork.data.model.ModelResponse
+import com.example.socialnetwork.data.model.ModelResponseInstagram
 import com.example.socialnetwork.data.model.ModelResponseProfileInstagram
 import retrofit2.http.*
 
@@ -11,7 +11,7 @@ interface InstagramApiClient {
     suspend fun getMedia(
         @Query("after") after: String,
         @Query("access_token") code: String?
-    ): ModelResponse
+    ): ModelResponseInstagram
 
     @GET(Constants.ENDPOINT_ME)
     suspend fun getProfile(@Query("access_token") code: String?): ModelResponseProfileInstagram

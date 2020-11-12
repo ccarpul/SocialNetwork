@@ -26,6 +26,7 @@ class Splash : AppCompatActivity() {
         job = GlobalScope.launch(Dispatchers.Main) {
             val intent = Intent(this@Splash, MainActivity::class.java)
             var name = ""
+            delay(1_000)
             sendMessage("F\tr\to\tm\t", 100).collect {
                 name += it
                 from.text = name

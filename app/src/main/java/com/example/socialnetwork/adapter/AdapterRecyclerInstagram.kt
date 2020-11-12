@@ -6,14 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socialnetwork.R
 import com.example.socialnetwork.data.model.Data
-import com.example.socialnetwork.data.model.ModelResponse
 import com.example.socialnetwork.utils.loadImageInstagram
 import com.example.socialnetwork.utils.setShape
 import kotlinx.android.synthetic.main.recycler_style_instagram.view.*
 
 
 class AdapterRecyclerInstagram(
-    private var list: ArrayList<Data>
+    private var list: MutableList<Data>
 
 ) : RecyclerView.Adapter<AdapterRecyclerInstagram.AdapterViewHolder>() {
 
@@ -25,9 +24,9 @@ class AdapterRecyclerInstagram(
         return AdapterViewHolder(view)
     }
 
-    fun addData(data: ModelResponse) {
-        list.addAll(data.data)
-        notifyDataSetChanged()
+    fun addData(data: Data) {
+        list.add(0,data)
+        notifyItemInserted(0)
     }
 
     fun getPosition(): Int = pos

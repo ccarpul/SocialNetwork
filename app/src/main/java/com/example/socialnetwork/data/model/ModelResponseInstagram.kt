@@ -1,6 +1,6 @@
 package com.example.socialnetwork.data.model
 
-data class ModelResponse(
+data class ModelResponseInstagram(
     val data: List<Data>,
     val paging: Paging
 )
